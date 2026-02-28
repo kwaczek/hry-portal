@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
-import { Spinner } from '@/components/ui/Spinner';
 import { ProfileEditor } from '@/components/profile/ProfileEditor';
 
 interface Profile {
@@ -84,19 +83,16 @@ export default function ProfilePage({ params }: PageProps) {
 
       if (ratingsData) setRatings(ratingsData);
 
-      // Fetch recent matches
+      // Fetch recent matches for this player
       const { data: matchesData } = await supabase
         .from('game_results')
         .select('id, game_type, players, played_at, duration_sec')
+        .contains('players', JSON.stringify([{ id: profileData.id }]))
         .order('played_at', { ascending: false })
         .limit(10);
 
       if (matchesData) {
-        // Filter matches that include this player
-        const playerMatches = matchesData.filter((m: RecentMatch) =>
-          m.players.some((p) => p.id === profileData.id)
-        );
-        setRecentMatches(playerMatches);
+        setRecentMatches(matchesData as RecentMatch[]);
       }
 
       setLoading(false);
@@ -107,8 +103,38 @@ export default function ProfilePage({ params }: PageProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Spinner size="lg" />
+      <div className="mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12">
+        {/* Profile skeleton */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-8 animate-pulse">
+          <div className="h-20 w-20 rounded-full bg-white/[0.06]" />
+          <div className="flex-1 space-y-2 text-center sm:text-left">
+            <div className="h-7 w-40 rounded bg-white/[0.06] mx-auto sm:mx-0" />
+            <div className="h-4 w-24 rounded bg-white/[0.04] mx-auto sm:mx-0" />
+            <div className="h-3 w-32 rounded bg-white/[0.03] mx-auto sm:mx-0" />
+          </div>
+        </div>
+        {/* Stats skeleton */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 animate-pulse">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+              <div className="h-3 w-12 rounded bg-white/[0.06] mb-2" />
+              <div className="h-6 w-16 rounded bg-white/[0.06]" />
+            </div>
+          ))}
+        </div>
+        {/* Matches skeleton */}
+        <div className="space-y-2 animate-pulse">
+          <div className="h-3 w-28 rounded bg-white/[0.06] mb-3" />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+              <div className="w-8 h-8 rounded-lg bg-white/[0.06]" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-4 w-32 rounded bg-white/[0.06]" />
+                <div className="h-3 w-16 rounded bg-white/[0.04]" />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

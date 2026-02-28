@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { createSocket, type GameSocket } from '@/lib/socket';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -8,39 +8,61 @@ export type ConnectionState = 'connecting' | 'connected' | 'error' | 'disconnect
 
 export function useSocket() {
   const { session } = useAuth();
-  const socketRef = useRef<GameSocket | null>(null);
+  const [socket, setSocket] = useState<GameSocket | null>(null);
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting');
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const reconnectAttempts = useRef(0);
+  const maxReconnectAttempts = 5;
 
   useEffect(() => {
     if (!session?.access_token) return;
 
-    const socket = createSocket(session.access_token);
-    socketRef.current = socket;
+    const s = createSocket(session.access_token);
+    setSocket(s);
+    reconnectAttempts.current = 0;
 
-    socket.on('connect', () => {
+    s.on('connect', () => {
       setConnectionState('connected');
       setConnectionError(null);
+      reconnectAttempts.current = 0;
     });
 
-    socket.on('disconnect', () => {
+    s.on('disconnect', (reason) => {
       setConnectionState('disconnected');
+      if (reason === 'io server disconnect') {
+        s.connect();
+      }
     });
 
-    socket.on('connect_error', (err) => {
-      setConnectionState('error');
-      setConnectionError(err.message);
+    s.on('connect_error', (err) => {
+      reconnectAttempts.current++;
+      if (reconnectAttempts.current >= maxReconnectAttempts) {
+        setConnectionState('error');
+        setConnectionError(err.message);
+      } else {
+        setConnectionState('disconnected');
+      }
     });
 
     return () => {
-      socket.disconnect();
-      socketRef.current = null;
+      s.disconnect();
+      setSocket(null);
     };
   }, [session?.access_token]);
 
+  const reconnect = useCallback(() => {
+    if (socket) {
+      reconnectAttempts.current = 0;
+      setConnectionState('connecting');
+      setConnectionError(null);
+      socket.connect();
+    }
+  }, [socket]);
+
   return {
-    socket: socketRef.current,
+    socket,
     connectionState,
     connectionError,
+    reconnect,
   };
 }

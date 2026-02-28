@@ -79,11 +79,11 @@
 
 ## Phase 11: Integration & Polish
 
-- [ ] **11.1** End-to-end integration test — manually test full flow: visit portal → click Rychlá hra → matchmaking → lobby → play full Prší game with 2 browser tabs → game ends → check Elo updated → check game in history → check leaderboard. Fix any issues found
-- [ ] **11.2** Add Umami analytics — add Umami tracking script to portal layout. Track: page views, game starts, game completions, registrations. Website ID from environment variable
-- [ ] **11.3** Error handling & edge cases — handle: server disconnect during game (reconnection UI), room not found (redirect to /prsi), auth token expiry (auto-refresh), full room (show error), concurrent actions (debounce), empty matchmaking (bot fill)
-- [ ] **11.4** Loading states & skeletons — add loading skeletons for: profile page, leaderboard, game room (connecting...), matchmaking ("Hledám soupeře..."). Spinner for actions in progress
-- [ ] **11.5** SEO & meta tags — Czech language meta tags, Open Graph tags for social sharing (game screenshots), proper page titles per route, favicon
+- [x] **11.1** End-to-end integration test — manually test full flow: visit portal → click Rychlá hra → matchmaking → lobby → play full Prší game with 2 browser tabs → game ends → check Elo updated → check game in history → check leaderboard. Fix any issues found
+- [x] **11.2** Add Umami analytics — add Umami tracking script to portal layout. Track: page views, game starts, game completions, registrations. Website ID from environment variable
+- [x] **11.3** Error handling & edge cases — handle: server disconnect during game (reconnection UI), room not found (redirect to /prsi), auth token expiry (auto-refresh), full room (show error), concurrent actions (debounce), empty matchmaking (bot fill)
+- [x] **11.4** Loading states & skeletons — add loading skeletons for: profile page, leaderboard, game room (connecting...), matchmaking ("Hledám soupeře..."). Spinner for actions in progress
+- [x] **11.5** SEO & meta tags — Czech language meta tags, Open Graph tags for social sharing (game screenshots), proper page titles per route, favicon
 
 ## Phase 12: Deployment
 

@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import type { PrsiGameState, PrsiAction, GameResult, Card, Suit, ChatMessage } from '@hry/shared';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import type { PrsiGameState, GameResult, Card, Suit, ChatMessage, PrsiAction } from '@hry/shared';
 import type { GameSocket } from '@/lib/socket';
 
 interface UseGameOptions {
@@ -9,11 +10,23 @@ interface UseGameOptions {
   roomCode: string;
 }
 
+const ACTION_DEBOUNCE_MS = 300;
+
 export function useGame({ socket, roomCode }: UseGameOptions) {
+  const router = useRouter();
   const [gameState, setGameState] = useState<PrsiGameState | null>(null);
   const [gameResult, setGameResult] = useState<GameResult | null>(null);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const lastActionTime = useRef(0);
+
+  // Debounce guard for game actions
+  function canAct(): boolean {
+    const now = Date.now();
+    if (now - lastActionTime.current < ACTION_DEBOUNCE_MS) return false;
+    lastActionTime.current = now;
+    return true;
+  }
 
   // Wire up socket listeners
   useEffect(() => {
@@ -28,6 +41,11 @@ export function useGame({ socket, roomCode }: UseGameOptions) {
 
     const onState = (state: PrsiGameState) => setGameState(state);
     const onError = (message: string) => {
+      // Room not found — redirect back to /prsi
+      if (message.toLowerCase().includes('not found') || message.toLowerCase().includes('nenalezena')) {
+        router.push('/prsi');
+        return;
+      }
       setError(message);
       setTimeout(() => setError(null), 4000);
     };
@@ -48,10 +66,11 @@ export function useGame({ socket, roomCode }: UseGameOptions) {
       socket.off('game:ended', onEnded);
       socket.off('chat:message', onChat);
     };
-  }, [socket, roomCode]);
+  }, [socket, roomCode, router]);
 
-  // Actions
+  // Actions with debounce
   const playCard = useCallback((card: Card, suitOverride?: Suit) => {
+    if (!canAct()) return;
     const action: PrsiAction = suitOverride
       ? { type: 'play', card, suitOverride }
       : { type: 'play', card };
@@ -59,6 +78,7 @@ export function useGame({ socket, roomCode }: UseGameOptions) {
   }, [socket]);
 
   const drawCard = useCallback(() => {
+    if (!canAct()) return;
     socket?.emit('game:action', { type: 'draw' });
   }, [socket]);
 

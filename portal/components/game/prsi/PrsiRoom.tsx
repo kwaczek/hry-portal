@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Card, Suit } from '@hry/shared';
 import { useAuth } from '@/hooks/useAuth';
@@ -22,7 +22,7 @@ interface PrsiRoomProps {
 export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   const router = useRouter();
   const { user, isGuest } = useAuth();
-  const { socket, connectionState, connectionError } = useSocket();
+  const { socket, connectionState, connectionError, reconnect } = useSocket();
   const { gameState, gameResult, chatMessages, error, actions } = useGame({ socket, roomCode });
 
   const myPlayerId = user?.id ?? '';
@@ -31,6 +31,19 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   const [suitPickerOpen, setSuitPickerOpen] = useState(false);
   const [pendingSvrsekCard, setPendingSvrsekCard] = useState<Card | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const lastReadCount = useRef(0);
+
+  const handleChatOpen = useCallback(() => {
+    setChatOpen(true);
+    lastReadCount.current = chatMessages.length;
+  }, [chatMessages.length]);
+
+  const handleChatClose = useCallback(() => {
+    lastReadCount.current = chatMessages.length;
+    setChatOpen(false);
+  }, [chatMessages.length]);
+
+  const unreadCount = chatMessages.length - lastReadCount.current;
 
   const handleSuitPick = useCallback((card: Card) => {
     setPendingSvrsekCard(card);
@@ -71,7 +84,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
         <div className="text-red-400 text-lg font-semibold">Chyba připojení</div>
         <p className="text-gray-400 text-sm">{connectionError ?? 'Nelze se připojit k hernímu serveru'}</p>
-        <Button onClick={() => window.location.reload()}>Zkusit znovu</Button>
+        <Button onClick={reconnect}>Zkusit znovu</Button>
       </div>
     );
   }
@@ -138,16 +151,16 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
 
       {/* Chat toggle */}
       <button
-        onClick={() => setChatOpen(!chatOpen)}
+        onClick={chatOpen ? handleChatClose : handleChatOpen}
         className="fixed top-16 right-4 z-30 p-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-gray-400 hover:text-white hover:bg-white/[0.1] transition-all cursor-pointer"
         title="Chat"
       >
         <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M3.43 2.524A41.29 41.29 0 0110 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.102 41.102 0 01-3.55.414c-.28.02-.521.18-.643.413l-1.712 3.293a.75.75 0 01-1.33 0l-1.713-3.293a.783.783 0 00-.642-.413 41.108 41.108 0 01-3.55-.414C1.993 13.245 1 11.986 1 10.574V5.426c0-1.413.993-2.67 2.43-2.902z" clipRule="evenodd" />
         </svg>
-        {chatMessages.length > 0 && (
+        {unreadCount > 0 && !chatOpen && (
           <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center">
-            {chatMessages.length > 9 ? '9+' : chatMessages.length}
+            {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
       </button>
@@ -159,7 +172,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
           isGuest={isGuest}
           onSend={actions.sendChat}
           onReaction={actions.sendReaction}
-          onClose={() => setChatOpen(false)}
+          onClose={handleChatClose}
         />
       )}
 

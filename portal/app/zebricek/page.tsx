@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Avatar } from '@/components/ui/Avatar';
-import { Spinner } from '@/components/ui/Spinner';
 import { Button } from '@/components/ui/Button';
 import { ELO_MIN_GAMES_FOR_LEADERBOARD } from '@hry/shared';
 
@@ -34,6 +33,7 @@ export default function LeaderboardPage() {
     const supabase = createClient();
 
     const from = pageNum * PAGE_SIZE;
+    // Fetch one extra row to detect if there's a next page
     const to = from + PAGE_SIZE;
 
     const { data } = await supabase
@@ -49,7 +49,7 @@ export default function LeaderboardPage() {
       .eq('game_type', 'prsi')
       .gte('games_played', ELO_MIN_GAMES_FOR_LEADERBOARD)
       .order('elo', { ascending: false })
-      .range(from, to);
+      .range(from, to + 1);
 
     if (data) {
       // Supabase returns profile as object, normalize
@@ -57,8 +57,8 @@ export default function LeaderboardPage() {
         ...row,
         profile: Array.isArray(row.profile) ? row.profile[0] : row.profile,
       })) as LeaderboardEntry[];
-      setEntries(normalized);
       setHasMore(normalized.length > PAGE_SIZE);
+      setEntries(normalized.slice(0, PAGE_SIZE));
     }
 
     setLoading(false);
@@ -88,8 +88,24 @@ export default function LeaderboardPage() {
         {/* Table */}
         <div className="animate-[fadeInUp_0.5s_ease-out]">
           {loading ? (
-            <div className="flex items-center justify-center py-16">
-              <Spinner size="lg" />
+            <div className="space-y-1 animate-pulse">
+              {/* Header skeleton */}
+              <div className="flex items-center gap-3 px-4 py-2">
+                <div className="w-8 h-3 rounded bg-white/[0.04]" />
+                <div className="flex-1 h-3 rounded bg-white/[0.04]" />
+                <div className="w-14 h-3 rounded bg-white/[0.04]" />
+              </div>
+              {/* Row skeletons */}
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                  <div className="w-8 h-8 rounded-lg bg-white/[0.06]" />
+                  <div className="flex items-center gap-2.5 flex-1">
+                    <div className="w-7 h-7 rounded-full bg-white/[0.06]" />
+                    <div className="h-4 w-24 rounded bg-white/[0.06]" />
+                  </div>
+                  <div className="w-10 h-4 rounded bg-white/[0.06]" />
+                </div>
+              ))}
             </div>
           ) : entries.length === 0 ? (
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-8 text-center">
