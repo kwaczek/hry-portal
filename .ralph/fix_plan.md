@@ -66,10 +66,10 @@
 
 ## Phase 9: Portal UI — Lobby & Room System
 
-- [ ] **9.1** Set up Socket.IO client — `lib/socket.ts`: singleton connection manager. `hooks/useSocket.ts`: connection state, auto-reconnect. `hooks/useGame.ts`: game state from server, action dispatchers (playCard, drawCard, sendChat). Pass Supabase JWT in handshake auth
-- [ ] **9.2** Implement Prší landing page `/prsi` — game description + rules (Czech), how-to-play section, "Rychlá hra" button (quick match), "Vytvořit místnost" button (private room), mini leaderboard (top 5 by Elo). Responsive layout
-- [ ] **9.3** Implement lobby UI in `/prsi/[roomCode]` — before game starts: room code display + share/copy button, player list with ready status, room settings (maxPlayers, ruleVariant) editable by host, "Připraven" toggle button, host "Začít hru" button (enabled when all ready or can fill with bots). Invite link generation
-- [ ] **9.4** Implement in-game chat UI — `components/game/Chat.tsx`: message list (text + reactions + system messages), text input (logged-in only, with character counter), reaction bar (quick emoji buttons). Compact sidebar on desktop, bottom drawer on mobile. Distinguishes message types visually
+- [x] **9.1** Set up Socket.IO client — `lib/socket.ts`: singleton connection manager. `hooks/useSocket.ts`: connection state, auto-reconnect. `hooks/useGame.ts`: game state from server, action dispatchers (playCard, drawCard, sendChat). Pass Supabase JWT in handshake auth
+- [x] **9.2** Implement Prší landing page `/prsi` — game description + rules (Czech), how-to-play section, "Rychlá hra" button (quick match), "Vytvořit místnost" button (private room), mini leaderboard (top 5 by Elo). Responsive layout
+- [x] **9.3** Implement lobby UI in `/prsi/[roomCode]` — before game starts: room code display + share/copy button, player list with ready status, room settings (maxPlayers, ruleVariant) editable by host, "Připraven" toggle button, host "Začít hru" button (enabled when all ready or can fill with bots). Invite link generation
+- [x] **9.4** Implement in-game chat UI — `components/game/Chat.tsx`: message list (text + reactions + system messages), text input (logged-in only, with character counter), reaction bar (quick emoji buttons). Compact sidebar on desktop, bottom drawer on mobile. Distinguishes message types visually
 
 ## Phase 10: Portal UI — Profiles & Leaderboard
 
