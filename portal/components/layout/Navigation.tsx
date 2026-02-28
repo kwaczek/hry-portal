@@ -88,7 +88,7 @@ export function Navigation() {
                     <div className="fixed inset-0" onClick={() => setDropdownOpen(false)} />
                     <div className="absolute right-0 mt-1 w-48 rounded-lg border border-white/[0.08] bg-gray-900 py-1 shadow-xl animate-[fadeIn_0.15s_ease-out]">
                       <Link
-                        href={`/profil/${encodeURIComponent(displayName)}`}
+                        href={`/profil/${encodeURIComponent(user?.id ?? '')}`}
                         className="block px-4 py-2 text-sm text-gray-300 hover:bg-white/[0.06] hover:text-white transition-colors"
                         onClick={() => setDropdownOpen(false)}
                       >

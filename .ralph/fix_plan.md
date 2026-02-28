@@ -73,9 +73,9 @@
 
 ## Phase 10: Portal UI — Profiles & Leaderboard
 
-- [ ] **10.1** Implement profile page `/profil/[username]` — avatar, display name, member since date. Per-game stats section: Elo rating, games played, win rate, current streak, best streak. Recent matches list (opponent, result, Elo change, date). Fetch from Supabase directly
-- [ ] **10.2** Implement leaderboard page `/zebricek` — top players table: rank, avatar, username, Elo, games played, win rate. Filterable by game type (only Prší for now). Paginated (25 per page). Only shows players with 5+ games. Fetch from Supabase with proper indexes
-- [ ] **10.3** Implement profile editing — logged-in users can edit: display name, username (unique check). Avatar from Google account or default generated avatar. Settings accessible from nav dropdown
+- [x] **10.1** Implement profile page `/profil/[username]` — avatar, display name, member since date. Per-game stats section: Elo rating, games played, win rate, current streak, best streak. Recent matches list (opponent, result, Elo change, date). Fetch from Supabase directly
+- [x] **10.2** Implement leaderboard page `/zebricek` — top players table: rank, avatar, username, Elo, games played, win rate. Filterable by game type (only Prší for now). Paginated (25 per page). Only shows players with 5+ games. Fetch from Supabase with proper indexes
+- [x] **10.3** Implement profile editing — logged-in users can edit: display name, username (unique check). Avatar from Google account or default generated avatar. Settings accessible from nav dropdown
 
 ## Phase 11: Integration & Polish
 
