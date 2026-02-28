@@ -2,12 +2,12 @@
 
 ## Phase 1: Project Scaffolding & Monorepo Setup
 
-- [ ] **1.1** Initialize npm workspaces monorepo — root `package.json` with `workspaces: ["portal", "server", "shared"]`, root `tsconfig.json` with strict mode, shared path aliases
-- [ ] **1.2** Scaffold `shared/` workspace — `package.json`, `tsconfig.json`, `types.ts` (Card, Suit, Rank, GameState, PrsiPlayer, SocketEvents, RoomConfig, ChatMessage types), `constants.ts` (suits, ranks, Elo K-factor, turn timer, limits)
-- [ ] **1.3** Scaffold `portal/` workspace — `npx create-next-app@latest` with App Router, TypeScript strict, Tailwind CSS, ESLint. Wire up shared workspace dependency. Create folder structure: `app/`, `components/ui/`, `components/layout/`, `components/auth/`, `components/game/`, `games/prsi/`, `lib/`, `hooks/`
-- [ ] **1.4** Scaffold `server/` workspace — Express + Socket.IO + TypeScript setup. `package.json` with dev/build scripts (tsx for dev, tsc for build). Create folder structure: `src/index.ts`, `src/rooms/`, `src/services/`, `src/middleware/`. Wire up shared workspace dependency
-- [ ] **1.5** Create `.env.example` in project root with all variable names (no values). Add root-level `npm run dev` script that runs portal + server concurrently
-- [ ] **1.6** Verify monorepo builds — run `npm install` from root, ensure `npm run build` succeeds for all workspaces, commit
+- [x] **1.1** Initialize npm workspaces monorepo — root `package.json` with `workspaces: ["portal", "server", "shared"]`, root `tsconfig.json` with strict mode, shared path aliases
+- [x] **1.2** Scaffold `shared/` workspace — `package.json`, `tsconfig.json`, `types.ts` (Card, Suit, Rank, GameState, PrsiPlayer, SocketEvents, RoomConfig, ChatMessage types), `constants.ts` (suits, ranks, Elo K-factor, turn timer, limits)
+- [x] **1.3** Scaffold `portal/` workspace — `npx create-next-app@latest` with App Router, TypeScript strict, Tailwind CSS, ESLint. Wire up shared workspace dependency. Create folder structure: `app/`, `components/ui/`, `components/layout/`, `components/auth/`, `components/game/`, `games/prsi/`, `lib/`, `hooks/`
+- [x] **1.4** Scaffold `server/` workspace — Express + Socket.IO + TypeScript setup. `package.json` with dev/build scripts (tsx for dev, tsc for build). Create folder structure: `src/index.ts`, `src/rooms/`, `src/services/`, `src/middleware/`. Wire up shared workspace dependency
+- [x] **1.5** Create `.env.example` in project root with all variable names (no values). Add root-level `npm run dev` script that runs portal + server concurrently
+- [x] **1.6** Verify monorepo builds — run `npm install` from root, ensure `npm run build` succeeds for all workspaces, commit
 
 ## Phase 2: Database & Auth Foundation
 
