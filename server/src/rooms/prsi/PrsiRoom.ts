@@ -12,6 +12,7 @@ import { PrsiEngine } from './PrsiEngine.js';
 import { PrsiBot } from './PrsiBot.js';
 import type { Room, RoomPlayer } from '../RoomManager.js';
 import type { RoomManager } from '../RoomManager.js';
+import { saveGameResult } from '../../services/gameResults.js';
 
 type GameSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 type GameServer = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -262,7 +263,7 @@ export class PrsiRoom {
     this.processBotTurn();
   }
 
-  private endGame(): void {
+  private async endGame(): Promise<void> {
     this.clearTurnTimer();
     this.room.phase = 'finished';
     this.room.finishedAt = Date.now();
@@ -286,8 +287,16 @@ export class PrsiRoom {
       }),
       ruleVariant: this.room.config.ruleVariant,
       durationSec,
-      eloChanges: [], // Filled by Elo service later
+      eloChanges: [],
     };
+
+    // Save to Supabase and compute Elo (non-blocking — don't break game end if DB fails)
+    try {
+      const eloChanges = await saveGameResult(result);
+      result.eloChanges = eloChanges;
+    } catch (err) {
+      console.error('Failed to save game result:', err);
+    }
 
     this.io.to(this.code).emit('game:ended', result);
     this.broadcastState();

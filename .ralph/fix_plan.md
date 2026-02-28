@@ -39,9 +39,9 @@
 
 ## Phase 5: Elo & Game Results
 
-- [ ] **5.1** Implement Elo service — `server/src/services/elo.ts`. Standard formula: Ea = 1 / (1 + 10^((Rb - Ra) / 400)), new = old + K*(S - E). K=32. For 2-player: winner S=1, loser S=0. For 3-4 player: pairwise comparison, average change. Only for logged-in (non-guest) users
-- [ ] **5.2** Implement game result writing — after game ends, server writes to Supabase: insert `game_results` row, update `ratings` table (elo, games_played, wins/losses, streaks). Use service role key. Transaction for atomicity
-- [ ] **5.3** Write unit tests for Elo calculation — test: 2-player (equal, unequal ratings), 3-4 player, guest exclusion, streak tracking
+- [x] **5.1** Implement Elo service — `server/src/services/elo.ts`. Standard formula: Ea = 1 / (1 + 10^((Rb - Ra) / 400)), new = old + K*(S - E). K=32. For 2-player: winner S=1, loser S=0. For 3-4 player: pairwise comparison, average change. Only for logged-in (non-guest) users
+- [x] **5.2** Implement game result writing — after game ends, server writes to Supabase: insert `game_results` row, update `ratings` table (elo, games_played, wins/losses, streaks). Use service role key. Transaction for atomicity
+- [x] **5.3** Write unit tests for Elo calculation — test: 2-player (equal, unequal ratings), 3-4 player, guest exclusion, streak tracking
 
 ## Phase 6: In-Game Chat
 
