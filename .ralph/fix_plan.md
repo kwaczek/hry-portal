@@ -22,11 +22,11 @@
 
 ## Phase 3: Shared Types & Game Engine
 
-- [ ] **3.1** Define complete Prší types in `shared/types.ts` — Card, Suit, Rank, PrsiGameState, PrsiPlayer, PrsiAction (play/draw), PrsiRuleVariant, GamePhase (waiting/playing/finished), all Socket.IO event types (client→server, server→client), RoomConfig, ChatMessage, GameResult, EloChange
-- [ ] **3.2** Define constants in `shared/constants.ts` — full Czech deck (32 cards), suit names in Czech, rank names in Czech, ELO_K_FACTOR=32, TURN_TIMER_SECONDS=30, MAX_PLAYERS=4, MIN_PLAYERS=2, RECONNECT_GRACE_SECONDS=60, ROOM_CODE_LENGTH=6, CHAT_RATE_LIMIT_MS=2000, CHAT_MAX_LENGTH=200, QUICK_REACTIONS array
-- [ ] **3.3** Implement `server/src/rooms/prsi/PrsiEngine.ts` — pure game logic class (no Socket.IO dependency). Methods: `createGame()`, `dealCards()`, `playCard(playerId, card)`, `drawCard(playerId)`, `validateMove(card)`, `checkWin()`, `getPlayerView(playerId)` (hides other hands), `nextTurn()`. Handle special cards: 7 (draw 2), Eso (skip), Svršek (suit change). Handle both Classic and Stacking variants
-- [ ] **3.4** Write unit tests for PrsiEngine — test: valid/invalid moves, special card effects, stacking 7s, suit override from Svršek, win condition (empty hand), deck reshuffling when draw pile empty, turn rotation, 2/3/4 player games
-- [ ] **3.5** Implement `server/src/rooms/prsi/PrsiBot.ts` — simple AI: prioritize special cards when advantageous, then matching cards (prefer cards that limit next player), then draw. Must work with PrsiEngine's public API
+- [x] **3.1** Define complete Prší types in `shared/types.ts` — Card, Suit, Rank, PrsiGameState, PrsiPlayer, PrsiAction (play/draw), PrsiRuleVariant, GamePhase (waiting/playing/finished), all Socket.IO event types (client→server, server→client), RoomConfig, ChatMessage, GameResult, EloChange
+- [x] **3.2** Define constants in `shared/constants.ts` — full Czech deck (32 cards), suit names in Czech, rank names in Czech, ELO_K_FACTOR=32, TURN_TIMER_SECONDS=30, MAX_PLAYERS=4, MIN_PLAYERS=2, RECONNECT_GRACE_SECONDS=60, ROOM_CODE_LENGTH=6, CHAT_RATE_LIMIT_MS=2000, CHAT_MAX_LENGTH=200, QUICK_REACTIONS array
+- [x] **3.3** Implement `server/src/rooms/prsi/PrsiEngine.ts` — pure game logic class (no Socket.IO dependency). Methods: `createGame()`, `dealCards()`, `playCard(playerId, card)`, `drawCard(playerId)`, `validateMove(card)`, `checkWin()`, `getPlayerView(playerId)` (hides other hands), `nextTurn()`. Handle special cards: 7 (draw 2), Eso (skip), Svršek (suit change). Handle both Classic and Stacking variants
+- [x] **3.4** Write unit tests for PrsiEngine — test: valid/invalid moves, special card effects, stacking 7s, suit override from Svršek, win condition (empty hand), deck reshuffling when draw pile empty, turn rotation, 2/3/4 player games
+- [x] **3.5** Implement `server/src/rooms/prsi/PrsiBot.ts` — simple AI: prioritize special cards when advantageous, then matching cards (prefer cards that limit next player), then draw. Must work with PrsiEngine's public API
 
 ## Phase 4: Room & Matchmaking System
 
