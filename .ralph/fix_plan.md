@@ -30,12 +30,12 @@
 
 ## Phase 4: Room & Matchmaking System
 
-- [ ] **4.1** Implement `server/src/rooms/RoomManager.ts` — Room CRUD with Map<roomCode, Room>. Methods: `createRoom(config)`, `joinRoom(code, player)`, `leaveRoom(code, playerId)`, `getRoom(code)`, `listRooms()`, `cleanupStaleRooms()`. Generate 6-char alphanumeric room codes. Auto-cleanup 5 min after game ends
-- [ ] **4.2** Implement `server/src/rooms/prsi/PrsiRoom.ts` — Socket.IO event handlers for a Prší room. Lifecycle: LOBBY → PLAYING → FINISHED. Handle: player join/leave, ready toggle, host start game, game actions (play/draw), suit selection (after Svršek), reconnection within 60s grace, bot replacement on timeout. Emit state updates to all clients (each player gets their own view via `getPlayerView`)
-- [ ] **4.3** Implement matchmaking service — `server/src/services/matchmaking.ts` using Upstash Redis (key prefix `hry:match:`). Queue players by {maxPlayers, ruleVariant}. When enough players → create room, connect all. 30s timeout → create room with bots filling remaining slots. Clean up stale queue entries
-- [ ] **4.4** Implement turn timer — 30 second countdown per turn. Server-side timer (not client). On expire: auto-draw for current player, advance turn. Broadcast timer ticks to clients. Pause timer during reconnection grace period
-- [ ] **4.5** Publish active rooms to Redis — `hry:rooms:active` sorted set with room metadata. Portal can read this to show "active games" count. Update on room create/destroy
-- [ ] **4.6** Wire up main Socket.IO server — `server/src/index.ts` with Express + Socket.IO, CORS config for portal URL, auth middleware on connection, route socket events to RoomManager/PrsiRoom. Health check endpoint at `/health`
+- [x] **4.1** Implement `server/src/rooms/RoomManager.ts` — Room CRUD with Map<roomCode, Room>. Methods: `createRoom(config)`, `joinRoom(code, player)`, `leaveRoom(code, playerId)`, `getRoom(code)`, `listRooms()`, `cleanupStaleRooms()`. Generate 6-char alphanumeric room codes. Auto-cleanup 5 min after game ends
+- [x] **4.2** Implement `server/src/rooms/prsi/PrsiRoom.ts` — Socket.IO event handlers for a Prší room. Lifecycle: LOBBY → PLAYING → FINISHED. Handle: player join/leave, ready toggle, host start game, game actions (play/draw), suit selection (after Svršek), reconnection within 60s grace, bot replacement on timeout. Emit state updates to all clients (each player gets their own view via `getPlayerView`)
+- [x] **4.3** Implement matchmaking service — `server/src/services/matchmaking.ts` using Upstash Redis (key prefix `hry:match:`). Queue players by {maxPlayers, ruleVariant}. When enough players → create room, connect all. 30s timeout → create room with bots filling remaining slots. Clean up stale queue entries
+- [x] **4.4** Implement turn timer — 30 second countdown per turn. Server-side timer (not client). On expire: auto-draw for current player, advance turn. Broadcast timer ticks to clients. Pause timer during reconnection grace period
+- [x] **4.5** Publish active rooms to Redis — `hry:rooms:active` sorted set with room metadata. Portal can read this to show "active games" count. Update on room create/destroy
+- [x] **4.6** Wire up main Socket.IO server — `server/src/index.ts` with Express + Socket.IO, CORS config for portal URL, auth middleware on connection, route socket events to RoomManager/PrsiRoom. Health check endpoint at `/health`
 
 ## Phase 5: Elo & Game Results
 
