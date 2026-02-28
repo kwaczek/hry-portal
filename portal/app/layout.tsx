@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Outfit, DM_Sans } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
+import { Navigation } from '@/components/layout/Navigation';
 import './globals.css';
 
 const outfit = Outfit({
@@ -27,8 +28,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs" className={`${outfit.variable} ${dmSans.variable}`}>
-      <body className="bg-gray-950 text-gray-100 font-[family-name:var(--font-body)] antialiased">
-        <AuthProvider>{children}</AuthProvider>
+      <body className="bg-[#08080e] text-gray-100 font-[family-name:var(--font-body)] antialiased min-h-screen">
+        <AuthProvider>
+          <Navigation />
+          <main>{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

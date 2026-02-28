@@ -50,9 +50,9 @@
 
 ## Phase 7: Portal UI — Layout & Navigation
 
-- [ ] **7.1** Design and implement root layout — `portal/app/layout.tsx`. Dark theme (dark background, warm accents from Czech card suits — red #c41e3a, green #2d5016). Global nav: logo "Hry.cz" (or portal name), nav links (Hry, Žebříček, Profil), auth button (login/avatar). Mobile hamburger menu. Czech language meta tags. Wrap with AuthProvider
-- [ ] **7.2** Implement shared UI primitives — `components/ui/`: Button (primary/secondary/ghost variants), Card (container), Modal (dialog), Input, Badge, Avatar, Spinner. All using Tailwind, dark theme, consistent design language
-- [ ] **7.3** Implement homepage `/` — game grid showing Prší card (playable, with player count badge) + 2-3 "Připravujeme" placeholder cards for future games. Hero section with CTA "Hrát Prší". Brief portal description. Mobile-first responsive grid
+- [x] **7.1** Design and implement root layout — `portal/app/layout.tsx`. Dark theme (dark background, warm accents from Czech card suits — red #c41e3a, green #2d5016). Global nav: logo "Hry.cz" (or portal name), nav links (Hry, Žebříček, Profil), auth button (login/avatar). Mobile hamburger menu. Czech language meta tags. Wrap with AuthProvider
+- [x] **7.2** Implement shared UI primitives — `components/ui/`: Button (primary/secondary/ghost variants), Card (container), Modal (dialog), Input, Badge, Avatar, Spinner. All using Tailwind, dark theme, consistent design language
+- [x] **7.3** Implement homepage `/` — game grid showing Prší card (playable, with player count badge) + 2-3 "Připravujeme" placeholder cards for future games. Hero section with CTA "Hrát Prší". Brief portal description. Mobile-first responsive grid
 
 ## Phase 8: Portal UI — Prší Game Pages
 
