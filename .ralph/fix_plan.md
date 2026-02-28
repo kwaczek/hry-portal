@@ -87,7 +87,7 @@
 
 ## Phase 12: Deployment
 
-- [ ] **12.1** Deploy game server to Railway — configure `server/` with build command, start command, environment variables (Supabase service key, Redis, PORT). Verify WebSocket connections work. Get Railway URL → update `NEXT_PUBLIC_GAME_SERVER_URL` in portal env
-- [ ] **12.2** Deploy portal to Vercel — connect GitHub repo, configure root directory to `portal/`, set environment variables. Verify build succeeds, auth flow works, Socket.IO connects to Railway server
-- [ ] **12.3** Smoke test production — test full flow on deployed URLs: auth, quick match, private room, gameplay, chat, results, profile, leaderboard. Verify CORS, WebSocket, and Supabase connections all work in production
-- [ ] **12.4** Update .env with production URLs — set `NEXT_PUBLIC_GAME_SERVER_URL` to Railway production URL. Redeploy portal if needed
+- [x] **12.1** Deploy game server to Railway — configure `server/` with build command, start command, environment variables (Supabase service key, Redis, PORT). Verify WebSocket connections work. Get Railway URL → update `NEXT_PUBLIC_GAME_SERVER_URL` in portal env
+- [x] **12.2** Deploy portal to Vercel — connect GitHub repo, configure root directory to `portal/`, set environment variables. Verify build succeeds, auth flow works, Socket.IO connects to Railway server
+- [x] **12.3** Smoke test production — test full flow on deployed URLs: auth, quick match, private room, gameplay, chat, results, profile, leaderboard. Verify CORS, WebSocket, and Supabase connections all work in production
+- [x] **12.4** Update .env with production URLs — set `NEXT_PUBLIC_GAME_SERVER_URL` to Railway production URL. Redeploy portal if needed
