@@ -11,14 +11,14 @@
 
 ## Phase 2: Database & Auth Foundation
 
-- [ ] **2.1** Create Supabase schema migration — write SQL file with `profiles`, `ratings`, `game_results` tables, indexes, and RLS policies as specified in PROMPT.md. Execute via Supabase SQL editor instructions in a comment, or use Supabase CLI if available
-- [ ] **2.2** Set up Supabase client in portal — `lib/supabase/client.ts` (browser client using NEXT_PUBLIC vars), `lib/supabase/server.ts` (server-side client for API routes). Install `@supabase/supabase-js` and `@supabase/ssr`
-- [ ] **2.3** Set up Supabase service client in game server — `server/src/services/supabase.ts` using `SUPABASE_SERVICE_ROLE_KEY` for writing game results and updating ratings. NEVER expose service role key to clients
-- [ ] **2.4** Implement auth provider in portal — `components/auth/AuthProvider.tsx` wrapping the app with Supabase session management. `hooks/useAuth.ts` returning user, session, loading state, login/logout functions
-- [ ] **2.5** Implement login page `/prihlaseni` — Google OAuth button + email/password form using Supabase Auth UI. Redirect back to previous page after login. Czech labels throughout
-- [ ] **2.6** Implement anonymous session — auto-create Supabase anonymous session on first visit if not logged in. Create guest profile row. `is_guest: true`
-- [ ] **2.7** Implement guest-to-permanent upgrade flow — after first game, show prompt "Chceš si uložit svůj pokrok? Zaregistruj se!" Use `linkIdentity()` to upgrade anonymous → permanent account. Verify game history stays linked (same user_id)
-- [ ] **2.8** Add auth middleware on game server — `server/src/middleware/auth.ts` that verifies Supabase JWT from Socket.IO handshake. Extract user_id and is_guest flag. Allow anonymous tokens for guest play
+- [x] **2.1** Create Supabase schema migration — write SQL file with `profiles`, `ratings`, `game_results` tables, indexes, and RLS policies as specified in PROMPT.md. Execute via Supabase SQL editor instructions in a comment, or use Supabase CLI if available
+- [x] **2.2** Set up Supabase client in portal — `lib/supabase/client.ts` (browser client using NEXT_PUBLIC vars), `lib/supabase/server.ts` (server-side client for API routes). Install `@supabase/supabase-js` and `@supabase/ssr`
+- [x] **2.3** Set up Supabase service client in game server — `server/src/services/supabase.ts` using `SUPABASE_SERVICE_ROLE_KEY` for writing game results and updating ratings. NEVER expose service role key to clients
+- [x] **2.4** Implement auth provider in portal — `components/auth/AuthProvider.tsx` wrapping the app with Supabase session management. `hooks/useAuth.ts` returning user, session, loading state, login/logout functions
+- [x] **2.5** Implement login page `/prihlaseni` — Google OAuth button + email/password form using Supabase Auth UI. Redirect back to previous page after login. Czech labels throughout
+- [x] **2.6** Implement anonymous session — auto-create Supabase anonymous session on first visit if not logged in. Create guest profile row. `is_guest: true`
+- [x] **2.7** Implement guest-to-permanent upgrade flow — after first game, show prompt "Chceš si uložit svůj pokrok? Zaregistruj se!" Use `linkIdentity()` to upgrade anonymous → permanent account. Verify game history stays linked (same user_id)
+- [x] **2.8** Add auth middleware on game server — `server/src/middleware/auth.ts` that verifies Supabase JWT from Socket.IO handshake. Extract user_id and is_guest flag. Allow anonymous tokens for guest play
 
 ## Phase 3: Shared Types & Game Engine
 

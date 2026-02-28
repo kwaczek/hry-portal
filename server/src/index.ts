@@ -1,8 +1,10 @@
+import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import type { ClientToServerEvents, ServerToClientEvents } from '@hry/shared';
+import { authMiddleware, type AuthenticatedSocket } from './middleware/auth.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -20,8 +22,13 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Auth middleware — verifies Supabase JWT from handshake
+io.use(authMiddleware);
+
 io.on('connection', (socket) => {
-  console.log(`Client connected: ${socket.id}`);
+  const authedSocket = socket as AuthenticatedSocket;
+  const { userId, isGuest } = authedSocket.data;
+  console.log(`Client connected: ${socket.id} (user: ${userId}, guest: ${isGuest})`);
 
   socket.on('disconnect', () => {
     console.log(`Client disconnected: ${socket.id}`);
