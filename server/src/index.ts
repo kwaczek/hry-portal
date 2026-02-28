@@ -201,6 +201,24 @@ io.on('connection', (socket) => {
     prsiRoom?.handleAction(userId, action);
   });
 
+  // --- Chat: Message ---
+  socket.on('chat:message', (text) => {
+    const roomCode = socketRoomMap.get(socket.id);
+    if (!roomCode) return;
+
+    const prsiRoom = prsiRooms.get(roomCode);
+    prsiRoom?.handleChatMessage(userId, isGuest, text);
+  });
+
+  // --- Chat: Reaction ---
+  socket.on('chat:reaction', (emoji) => {
+    const roomCode = socketRoomMap.get(socket.id);
+    if (!roomCode) return;
+
+    const prsiRoom = prsiRooms.get(roomCode);
+    prsiRoom?.handleChatReaction(userId, emoji);
+  });
+
   // --- Matchmaking: Join Queue ---
   socket.on('matchmaking:join', async (config) => {
     socketMatchmakingMap.set(socket.id, config);

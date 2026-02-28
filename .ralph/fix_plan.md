@@ -45,8 +45,8 @@
 
 ## Phase 6: In-Game Chat
 
-- [ ] **6.1** Implement chat system in PrsiRoom — handle `chat:message` and `chat:reaction` socket events. Text messages: logged-in users only, max 200 chars, rate limit 1 per 2s. Reactions: everyone, from predefined set (👍 😂 😤 🎉 💀 🃏). System messages for game events. Broadcast to room
-- [ ] **6.2** Implement Czech profanity filter — `server/src/services/profanity.ts`. Basic Czech word list. Simple substring/regex check. Filter text messages before broadcast. No moderation tools in Phase 1
+- [x] **6.1** Implement chat system in PrsiRoom — handle `chat:message` and `chat:reaction` socket events. Text messages: logged-in users only, max 200 chars, rate limit 1 per 2s. Reactions: everyone, from predefined set (👍 😂 😤 🎉 💀 🃏). System messages for game events. Broadcast to room
+- [x] **6.2** Implement Czech profanity filter — `server/src/services/profanity.ts`. Basic Czech word list. Simple substring/regex check. Filter text messages before broadcast. No moderation tools in Phase 1
 
 ## Phase 7: Portal UI — Layout & Navigation
 

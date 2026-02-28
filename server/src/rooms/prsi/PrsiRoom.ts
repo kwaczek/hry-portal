@@ -6,13 +6,15 @@ import type {
   PrsiGameState,
   Suit,
   GameResult,
+  ChatMessage,
 } from '@hry/shared';
-import { MIN_PLAYERS, TURN_TIMER_SECONDS, RECONNECT_GRACE_SECONDS } from '@hry/shared';
+import { MIN_PLAYERS, TURN_TIMER_SECONDS, RECONNECT_GRACE_SECONDS, CHAT_MAX_LENGTH, CHAT_RATE_LIMIT_MS, QUICK_REACTIONS } from '@hry/shared';
 import { PrsiEngine } from './PrsiEngine.js';
 import { PrsiBot } from './PrsiBot.js';
 import type { Room, RoomPlayer } from '../RoomManager.js';
 import type { RoomManager } from '../RoomManager.js';
 import { saveGameResult } from '../../services/gameResults.js';
+import { filterProfanity } from '../../services/profanity.js';
 
 type GameSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 type GameServer = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -31,6 +33,8 @@ export class PrsiRoom {
   private disconnectTimers = new Map<string, DisconnectTimer>();
   private socketMap = new Map<string, string>(); // playerId → socketId
   private startedAt: number | null = null;
+  private lastMessageTime = new Map<string, number>(); // playerId → timestamp
+  private messageCounter = 0;
 
   constructor(
     private io: GameServer,
@@ -258,6 +262,7 @@ export class PrsiRoom {
     this.startedAt = Date.now();
 
     this.io.to(this.code).emit('game:started');
+    this.sendSystemMessage('Hra začala!');
     this.broadcastState();
     this.resetTurnTimer();
     this.processBotTurn();
@@ -355,6 +360,85 @@ export class PrsiRoom {
         turnTimeRemaining: this.turnTimeRemaining,
       };
       this.io.to(socketId).emit('room:state', state);
+    }
+  }
+
+  // === Chat ===
+
+  handleChatMessage(playerId: string, isGuest: boolean, text: string): void {
+    // Guests cannot send text messages
+    if (isGuest) {
+      const socketId = this.socketMap.get(playerId);
+      if (socketId) {
+        this.io.to(socketId).emit('room:error', 'Pro psaní zpráv se musíš přihlásit');
+      }
+      return;
+    }
+
+    // Rate limit
+    const now = Date.now();
+    const lastTime = this.lastMessageTime.get(playerId) ?? 0;
+    if (now - lastTime < CHAT_RATE_LIMIT_MS) {
+      return;
+    }
+
+    // Validate length
+    const trimmed = text.trim();
+    if (!trimmed || trimmed.length > CHAT_MAX_LENGTH) return;
+
+    this.lastMessageTime.set(playerId, now);
+
+    const player = this.room.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    const message: ChatMessage = {
+      id: `msg_${++this.messageCounter}`,
+      type: 'text',
+      senderId: playerId,
+      senderName: player.username,
+      content: filterProfanity(trimmed),
+      timestamp: now,
+    };
+
+    // Broadcast to all sockets in the room
+    for (const [, socketId] of this.socketMap) {
+      this.io.to(socketId).emit('chat:message', message);
+    }
+  }
+
+  handleChatReaction(playerId: string, emoji: string): void {
+    // Validate emoji is in the allowed set
+    if (!(QUICK_REACTIONS as readonly string[]).includes(emoji)) return;
+
+    const player = this.room.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    const message: ChatMessage = {
+      id: `msg_${++this.messageCounter}`,
+      type: 'reaction',
+      senderId: playerId,
+      senderName: player.username,
+      content: emoji,
+      timestamp: Date.now(),
+    };
+
+    for (const [, socketId] of this.socketMap) {
+      this.io.to(socketId).emit('chat:message', message);
+    }
+  }
+
+  sendSystemMessage(content: string): void {
+    const message: ChatMessage = {
+      id: `msg_${++this.messageCounter}`,
+      type: 'system',
+      senderId: 'system',
+      senderName: 'Systém',
+      content,
+      timestamp: Date.now(),
+    };
+
+    for (const [, socketId] of this.socketMap) {
+      this.io.to(socketId).emit('chat:message', message);
     }
   }
 
