@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.env
+.env.local
+.ralph/logs/
+.ralph/.session_id
+.ralph/.call_count
+.ralph/.status
+.ralph/.last_reset
+.ralph/.loop_start_sha
+.ralph/live.log
+dist/
+*.tsbuildinfo
