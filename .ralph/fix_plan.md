@@ -56,13 +56,13 @@
 
 ## Phase 8: Portal UI — Prší Game Pages
 
-- [ ] **8.1** Generate SVG card assets — programmatic SVG generation for all 32 Czech deck cards + card back. Suits: Červený (heart shape, red), Zelený (leaf shape, green), Kule (bell shape, yellow/gold), Žaludy (acorn shape, brown). Rank text in center. Clean, modern design. Card back with portal branding pattern. Export as React components or inline SVG
-- [ ] **8.2** Implement `PrsiCard.tsx` component — single card display using generated SVGs. Props: card data, face up/down, selected state, playable state (glow/highlight), size variant (sm/md/lg). CSS transitions for flip, play, draw animations
-- [ ] **8.3** Implement `PrsiHand.tsx` component — player's hand with fan/arc layout on mobile, horizontal spread on desktop. Cards are selectable (tap to select, tap again to play). Highlight playable cards. Responsive — works from 1 card to 15+ cards
-- [ ] **8.4** Implement `PrsiTable.tsx` component — game table center: discard pile (top card visible + count), draw deck (click to draw + count), opponent hand areas (card backs + count, arranged around table). Current player indicator. Suit override indicator when active
-- [ ] **8.5** Implement `PrsiSuitPicker.tsx` — modal that appears after playing Svršek. Four large suit buttons with Czech names. Must pick before turn ends. Auto-pick random suit if timer expires during picker
-- [ ] **8.6** Implement `PrsiResults.tsx` — end-of-game screen: placements (1st, 2nd, etc.), Elo changes per player (if rated), game duration, "Hrát znovu" (rematch in same room) + "Zpět do lobby" buttons
-- [ ] **8.7** Implement `PrsiGame.tsx` — main game state machine component. States: LOBBY, PLAYING, FINISHED. Connects to game server via Socket.IO. Receives state updates, dispatches player actions. Composes PrsiTable, PrsiHand, PrsiSuitPicker, PrsiResults. Handles reconnection UI ("Připojování...")
+- [x] **8.1** Generate SVG card assets — programmatic SVG generation for all 32 Czech deck cards + card back. Suits: Červený (heart shape, red), Zelený (leaf shape, green), Kule (bell shape, yellow/gold), Žaludy (acorn shape, brown). Rank text in center. Clean, modern design. Card back with portal branding pattern. Export as React components or inline SVG
+- [x] **8.2** Implement `PrsiCard.tsx` component — single card display using generated SVGs. Props: card data, face up/down, selected state, playable state (glow/highlight), size variant (sm/md/lg). CSS transitions for flip, play, draw animations
+- [x] **8.3** Implement `PrsiHand.tsx` component — player's hand with fan/arc layout on mobile, horizontal spread on desktop. Cards are selectable (tap to select, tap again to play). Highlight playable cards. Responsive — works from 1 card to 15+ cards
+- [x] **8.4** Implement `PrsiTable.tsx` component — game table center: discard pile (top card visible + count), draw deck (click to draw + count), opponent hand areas (card backs + count, arranged around table). Current player indicator. Suit override indicator when active
+- [x] **8.5** Implement `PrsiSuitPicker.tsx` — modal that appears after playing Svršek. Four large suit buttons with Czech names. Must pick before turn ends. Auto-pick random suit if timer expires during picker
+- [x] **8.6** Implement `PrsiResults.tsx` — end-of-game screen: placements (1st, 2nd, etc.), Elo changes per player (if rated), game duration, "Hrát znovu" (rematch in same room) + "Zpět do lobby" buttons
+- [x] **8.7** Implement `PrsiGame.tsx` — main game state machine component. States: LOBBY, PLAYING, FINISHED. Connects to game server via Socket.IO. Receives state updates, dispatches player actions. Composes PrsiTable, PrsiHand, PrsiSuitPicker, PrsiResults. Handles reconnection UI ("Připojování...")
 
 ## Phase 9: Portal UI — Lobby & Room System
 
