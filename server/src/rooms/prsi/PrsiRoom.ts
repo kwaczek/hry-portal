@@ -94,18 +94,23 @@ export class PrsiRoom {
       this.disconnectTimers.set(playerId, { playerId, timeout });
       this.broadcastState();
     } else {
-      // In lobby, just remove the player
-      this.roomManager.leaveRoom(this.code, playerId);
+      // In lobby, allow a short grace period for page navigation socket handoff
+      const timeout = setTimeout(() => {
+        const p = this.room.players.find(pl => pl.id === playerId);
+        if (p && !p.isConnected) {
+          this.roomManager.leaveRoom(this.code, playerId);
+          this.disconnectTimers.delete(playerId);
+          this.broadcastState();
+        }
+      }, 5000);
+
+      this.disconnectTimers.set(playerId, { playerId, timeout });
       this.broadcastState();
     }
   }
 
   handleReconnect(playerId: string, socketId: string): void {
-    const timer = this.disconnectTimers.get(playerId);
-    if (timer) {
-      clearTimeout(timer.timeout);
-      this.disconnectTimers.delete(playerId);
-    }
+    this.clearDisconnectTimer(playerId);
 
     const player = this.room.players.find(p => p.id === playerId);
     if (player) {
@@ -114,6 +119,14 @@ export class PrsiRoom {
     }
 
     this.broadcastState();
+  }
+
+  clearDisconnectTimer(playerId: string): void {
+    const timer = this.disconnectTimers.get(playerId);
+    if (timer) {
+      clearTimeout(timer.timeout);
+      this.disconnectTimers.delete(playerId);
+    }
   }
 
   // === Game Actions ===

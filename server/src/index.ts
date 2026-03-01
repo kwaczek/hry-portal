@@ -117,16 +117,24 @@ io.on('connection', (socket) => {
 
   // --- Room: Join ---
   socket.on('room:join', async (roomCode) => {
-    // Check if reconnecting to an existing room
+    // Check if player is already in this room (reconnection or socket handoff during navigation)
     const existingRoom = roomManager.getRoom(roomCode);
     if (existingRoom) {
       const existingPlayer = existingRoom.players.find(p => p.id === userId);
-      if (existingPlayer && !existingPlayer.isConnected) {
+      if (existingPlayer) {
         const prsiRoom = getOrCreatePrsiRoom(roomCode);
         if (prsiRoom) {
-          prsiRoom.handleReconnect(userId, socket.id);
+          // Re-register socket regardless of connected state — handles both
+          // reconnection (isConnected=false) and socket handoff during page navigation
+          existingPlayer.isConnected = true;
+          prsiRoom.registerSocket(userId, socket.id);
           socket.join(roomCode);
           socketRoomMap.set(socket.id, roomCode);
+
+          // Clear any pending disconnect timer
+          prsiRoom.clearDisconnectTimer(userId);
+
+          prsiRoom.broadcastState();
           await publishRoomState(roomCode);
           return;
         }

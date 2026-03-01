@@ -2,6 +2,7 @@ node_modules/
 .next/
 .env
 .env.local
+.env.vercel.local
 .ralph/logs/
 .ralph/.session_id
 .ralph/.call_count
@@ -11,3 +12,4 @@ node_modules/
 .ralph/live.log
 dist/
 *.tsbuildinfo
+.vercel
