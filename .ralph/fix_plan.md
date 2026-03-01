@@ -186,8 +186,8 @@
 - [x] **17.2** **Timer visibility:** Check `PrsiTable.tsx` or the game UI component — is there a visible countdown timer? Check if the server emits `timer:tick` events and if the client renders them. The timer should be a prominent visual element (countdown number or progress bar) near the active player. If missing, add it.
 - [x] **17.3** **Suit picker cards hidden:** Read `PrsiSuitPicker.tsx` and how it overlays the game. The modal should NOT cover the player's hand. Fix: either make the suit picker a non-blocking overlay (positioned above the hand area), or show a mini version of the player's hand inside the picker, or use a bottom sheet that doesn't cover the hand.
 - [x] **17.4** **Turn indicator:** Add a clear visual indicator for whose turn it is. Options: glowing border around active player's area, animated arrow or spotlight, "Tvůj tah!" text overlay on the player's hand, pulsing highlight on the active player's name. Must be obvious even to first-time players.
-- [ ] **17.5** Test all 4 fixes with Playwright — verify ace stacking works, timer counts down visibly, cards visible during suit picker, and active player is clearly indicated. Take screenshots.
-- [ ] **17.6** Run `npm run build` and `npm test` — all must pass. Deploy to Railway + Vercel. Test on production.
+- [x] **17.5** Test all 4 fixes with Playwright — verify ace stacking works, timer counts down visibly, cards visible during suit picker, and active player is clearly indicated. Take screenshots.
+- [x] **17.6** Run `npm run build` and `npm test` — all must pass. Deploy to Railway + Vercel. Test on production.
 
 ## Phase 18: REDESIGN — "Hospoda" theme for game portal
 
@@ -209,8 +209,8 @@
 **INVOKE `/frontend-design:frontend-design` for this entire phase — this is a major visual overhaul.**
 
 **Implementation steps:**
-- [ ] **18.1** **Design system overhaul** — INVOKE `/frontend-design:frontend-design`. Create a new color palette, typography scale, and component theme based on the hospoda concept. Update `tailwind.config.ts` with new design tokens: colors (wood brown, amber, cream, pub green, card red), fonts (a Czech-friendly display font + clean body font), border-radius, shadows. Create or update `globals.css` with texture backgrounds and ambient styling.
-- [ ] **18.2** **Homepage redesign** — Rebuild `/` (homepage). Hero: large welcoming area with portal name and tagline ("Česká hospodská hra online" or similar). Game cards as "pub tables" — each game shown as an inviting card/table you can sit at, with player count badge, "Hrát" CTA. Active players count. The 2-3 "Připravujeme" placeholders should look like empty tables with "Brzy" signs. Mobile-first, responsive.
+- [x] **18.1** **Design system overhaul** — INVOKE `/frontend-design:frontend-design`. Create a new color palette, typography scale, and component theme based on the hospoda concept. Update `tailwind.config.ts` with new design tokens: colors (wood brown, amber, cream, pub green, card red), fonts (a Czech-friendly display font + clean body font), border-radius, shadows. Create or update `globals.css` with texture backgrounds and ambient styling.
+- [x] **18.2** **Homepage redesign** — Rebuild `/` (homepage). Hero: large welcoming area with portal name and tagline ("Česká hospodská hra online" or similar). Game cards as "pub tables" — each game shown as an inviting card/table you can sit at, with player count badge, "Hrát" CTA. Active players count. The 2-3 "Připravujeme" placeholders should look like empty tables with "Brzy" signs. Mobile-first, responsive.
 - [ ] **18.3** **Prší landing page redesign** — Rebuild `/prsi` with the hospoda theme. Game rules section styled like a chalk board or pub menu. "Rychlá hra" and "Vytvořit místnost" as prominent, inviting CTAs. Mini leaderboard styled as a pub scoreboard.
 - [ ] **18.4** **Navigation & layout overhaul** — Update the root layout, nav bar, and footer with the new theme. Nav should feel integrated, not generic. Footer with hospoda-style credits. Smooth page transitions.
 - [ ] **18.5** **Game room visual polish** — Update the Prší game table UI (`PrsiTable.tsx`, `PrsiHand.tsx`, `PrsiCard.tsx`) to match the hospoda theme. Card table should feel like a green felt pub table. Cards should have subtle shadows and tactile feel. Chat area styled like pub banter.
