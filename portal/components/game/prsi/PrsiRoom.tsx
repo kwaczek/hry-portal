@@ -21,7 +21,7 @@ interface PrsiRoomProps {
 
 export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   const router = useRouter();
-  const { user, isGuest, session, loading: authLoading } = useAuth();
+  const { user, isGuest, session, loading: authLoading, anonSignInFailed, retryAnonSignIn } = useAuth();
   const { socket, connectionState, connectionError, reconnect } = useSocket();
   const { gameState, gameResult, chatMessages, error, actions } = useGame({ socket, roomCode });
 
@@ -72,9 +72,24 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   if (!authLoading && !session) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
-        <div className="text-lg font-semibold">Pro hru je potřeba se přihlásit</div>
-        <p className="text-gray-400 text-sm">Přihlas se nebo si vytvoř účet pro hraní.</p>
-        <Button onClick={() => router.push('/prihlaseni')}>Přihlásit se</Button>
+        {anonSignInFailed ? (
+          <>
+            <div className="text-lg font-semibold text-amber-400">Hostovský přístup je dočasně nedostupný</div>
+            <p className="text-gray-400 text-sm text-center max-w-sm">
+              Nepodařilo se vytvořit hostovskou relaci. Zkus to znovu nebo se přihlas.
+            </p>
+            <div className="flex gap-3">
+              <Button onClick={retryAnonSignIn}>Zkusit znovu</Button>
+              <Button variant="ghost" onClick={() => router.push('/prihlaseni')}>Přihlásit se</Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="text-lg font-semibold">Pro hru je potřeba se přihlásit</div>
+            <p className="text-gray-400 text-sm">Přihlas se nebo si vytvoř účet pro hraní.</p>
+            <Button onClick={() => router.push('/prihlaseni')}>Přihlásit se</Button>
+          </>
+        )}
       </div>
     );
   }

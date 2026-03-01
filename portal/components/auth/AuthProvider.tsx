@@ -9,6 +9,8 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isGuest: boolean;
+  anonSignInFailed: boolean;
+  retryAnonSignIn: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
   signUpWithEmail: (email: string, password: string) => Promise<{ error: string | null }>;
@@ -50,6 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [anonSignInFailed, setAnonSignInFailed] = useState(false);
   const anonSignInAttempted = useRef(false);
 
   useEffect(() => {
@@ -77,8 +80,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { error } = await supabase.auth.signInAnonymously();
         if (error) {
           // Anonymous sign-in may be disabled in Supabase dashboard.
-          // Stop loading so the UI can still render (login prompt instead of spinner).
           console.warn('Anonymous sign-in failed:', error.message);
+          setAnonSignInFailed(true);
           setLoading(false);
         }
         // On success, state will be updated via onAuthStateChange
@@ -89,6 +92,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   const isGuest = user?.is_anonymous ?? false;
+
+  const retryAnonSignIn = async () => {
+    setLoading(true);
+    setAnonSignInFailed(false);
+    const { error } = await supabase.auth.signInAnonymously();
+    if (error) {
+      console.warn('Anonymous sign-in retry failed:', error.message);
+      setAnonSignInFailed(true);
+      setLoading(false);
+    }
+    // On success, onAuthStateChange will update state
+  };
 
   const signInWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -139,6 +154,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         session,
         loading,
         isGuest,
+        anonSignInFailed,
+        retryAnonSignIn,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,

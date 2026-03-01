@@ -13,7 +13,7 @@ import type { PrsiRuleVariant } from '@hry/shared';
 
 export default function PrsiPage() {
   const router = useRouter();
-  const { session, loading: authLoading } = useAuth();
+  const { session, loading: authLoading, anonSignInFailed, retryAnonSignIn } = useAuth();
   const { socket, connectionState } = useSocket();
 
   const [joinCode, setJoinCode] = useState('');
@@ -153,6 +153,28 @@ export default function PrsiPage() {
                     Zrušit
                   </Button>
                 </div>
+              ) : needsLogin && anonSignInFailed ? (
+                <div className="flex flex-col gap-2">
+                  <p className="text-xs text-amber-400/80 text-center">
+                    Hostovský přístup je dočasně nedostupný.
+                  </p>
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    className="w-full"
+                    onClick={retryAnonSignIn}
+                  >
+                    Zkusit znovu
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => router.push('/prihlaseni')}
+                  >
+                    Nebo se přihlásit
+                  </Button>
+                </div>
               ) : needsLogin ? (
                 <Button
                   variant="primary"
@@ -191,16 +213,40 @@ export default function PrsiPage() {
               <p className="text-sm text-gray-400 mb-4">
                 Vytvoř místnost a pozvi přátele. Sdílej jim kód nebo odkaz.
               </p>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="w-full"
-                loading={creating}
-                onClick={needsLogin ? () => router.push('/prihlaseni') : handleCreateRoom}
-                disabled={!needsLogin && !isConnected}
-              >
-                {needsLogin ? 'Přihlásit se' : 'Vytvořit místnost'}
-              </Button>
+              {needsLogin && anonSignInFailed ? (
+                <div className="flex flex-col gap-2">
+                  <p className="text-xs text-amber-400/80 text-center">
+                    Hostovský přístup je dočasně nedostupný.
+                  </p>
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    className="w-full"
+                    onClick={retryAnonSignIn}
+                  >
+                    Zkusit znovu
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => router.push('/prihlaseni')}
+                  >
+                    Nebo se přihlásit
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="w-full"
+                  loading={creating}
+                  onClick={needsLogin ? () => router.push('/prihlaseni') : handleCreateRoom}
+                  disabled={!needsLogin && !isConnected}
+                >
+                  {needsLogin ? 'Přihlásit se' : 'Vytvořit místnost'}
+                </Button>
+              )}
             </div>
           </div>
         </div>
