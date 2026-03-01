@@ -75,7 +75,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
         {anonSignInFailed ? (
           <>
             <div className="text-lg font-semibold text-amber-400">Hostovský přístup je dočasně nedostupný</div>
-            <p className="text-gray-400 text-sm text-center max-w-sm">
+            <p className="text-text-muted text-sm text-center max-w-sm">
               Nepodařilo se vytvořit hostovskou relaci. Zkus to znovu nebo se přihlas.
             </p>
             <div className="flex gap-3">
@@ -85,8 +85,8 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
           </>
         ) : (
           <>
-            <div className="text-lg font-semibold">Pro hru je potřeba se přihlásit</div>
-            <p className="text-gray-400 text-sm">Přihlas se nebo si vytvoř účet pro hraní.</p>
+            <div className="text-lg font-semibold text-text-primary">Pro hru je potřeba se přihlásit</div>
+            <p className="text-text-muted text-sm">Přihlas se nebo si vytvoř účet pro hraní.</p>
             <Button onClick={() => router.push('/prihlaseni')}>Přihlásit se</Button>
           </>
         )}
@@ -100,7 +100,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="text-gray-400 text-sm">Připojování k serveru...</p>
+        <p className="text-text-muted text-sm">Připojování k serveru...</p>
       </div>
     );
   }
@@ -108,8 +108,8 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   if (connectionState === 'error') {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
-        <div className="text-red-400 text-lg font-semibold">Chyba připojení</div>
-        <p className="text-gray-400 text-sm">{connectionError ?? 'Nelze se připojit k hernímu serveru'}</p>
+        <div className="text-card-red-400 text-lg font-semibold">Chyba připojení</div>
+        <p className="text-text-muted text-sm">{connectionError ?? 'Nelze se připojit k hernímu serveru'}</p>
         <Button onClick={reconnect}>Zkusit znovu</Button>
       </div>
     );
@@ -119,7 +119,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="text-gray-400 text-sm">Odpojeno. Připojování...</p>
+        <p className="text-text-muted text-sm">Odpojeno. Připojování...</p>
       </div>
     );
   }
@@ -128,7 +128,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
         <Spinner size="lg" />
-        <p className="text-gray-400 text-sm">Načítání herní místnosti...</p>
+        <p className="text-text-muted text-sm">Načítání herní místnosti...</p>
       </div>
     );
   }
@@ -170,7 +170,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
     <div className="flex flex-col min-h-[calc(100vh-3.5rem)]">
       {/* Error toast */}
       {error && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400 animate-[fadeInUp_0.3s_ease-out]">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-card-red-500/10 border border-card-red-500/20 text-sm text-card-red-400 animate-[fadeInUp_0.3s_ease-out]">
           {error}
         </div>
       )}
@@ -178,14 +178,14 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
       {/* Chat toggle */}
       <button
         onClick={chatOpen ? handleChatClose : handleChatOpen}
-        className="fixed top-16 right-4 z-30 p-2 rounded-lg bg-white/[0.06] border border-white/[0.08] text-gray-400 hover:text-white hover:bg-white/[0.1] transition-all cursor-pointer"
+        className="fixed top-16 right-4 z-30 p-2 rounded-lg bg-bg-surface border border-border-subtle text-text-muted hover:text-text-primary hover:bg-bg-hover transition-all cursor-pointer"
         title="Chat"
       >
         <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M3.43 2.524A41.29 41.29 0 0110 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.102 41.102 0 01-3.55.414c-.28.02-.521.18-.643.413l-1.712 3.293a.75.75 0 01-1.33 0l-1.713-3.293a.783.783 0 00-.642-.413 41.108 41.108 0 01-3.55-.414C1.993 13.245 1 11.986 1 10.574V5.426c0-1.413.993-2.67 2.43-2.902z" clipRule="evenodd" />
         </svg>
         {unreadCount > 0 && !chatOpen && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-[10px] font-bold text-bg-root flex items-center justify-center">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -213,7 +213,7 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
       </div>
 
       {/* My hand + suit picker */}
-      <div className="relative sticky bottom-0 bg-gradient-to-t from-[#08080e] via-[#08080e] to-transparent pt-8 pb-4">
+      <div className="relative sticky bottom-0 bg-gradient-to-t from-bg-root via-bg-root to-transparent pt-8 pb-4">
         {/* Suit picker floats above the hand */}
         <PrsiSuitPicker
           open={suitPickerOpen}

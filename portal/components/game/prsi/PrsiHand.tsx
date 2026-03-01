@@ -72,21 +72,21 @@ export function PrsiHand({ hand, gameState, isMyTurn, onPlayCard, onDrawCard, on
   return (
     <div className={`w-full rounded-xl transition-all duration-300 ${
       isMyTurn
-        ? 'ring-2 ring-red-500/30 bg-red-500/[0.03] shadow-[0_0_20px_rgba(239,68,68,0.1)]'
+        ? 'ring-2 ring-amber-400/30 bg-amber-400/[0.03] shadow-[0_0_20px_rgba(212,160,74,0.1)]'
         : ''
     }`}>
       {/* Hand label */}
       <div className="flex items-center justify-between mb-2 px-3 pt-2">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">
+        <span className="text-xs text-text-faint uppercase tracking-wider font-[family-name:var(--font-display)]">
           Tvoje karty ({hand.length})
         </span>
         {isMyTurn ? (
-          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-500/15 text-sm font-bold text-red-400 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-red-500" />
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/15 text-sm font-bold text-amber-300 animate-pulse">
+            <span className="w-2 h-2 rounded-full bg-amber-400" />
             Tvůj tah!
           </span>
         ) : gameState.phase === 'playing' ? (
-          <span className="text-xs text-gray-600">
+          <span className="text-xs text-text-faint">
             Čekej...
           </span>
         ) : null}
@@ -124,8 +124,8 @@ export function PrsiHand({ hand, gameState, isMyTurn, onPlayCard, onDrawCard, on
             onClick={() => { onDrawCard(); setSelectedIndex(null); }}
             className="
               px-4 py-2 rounded-lg text-sm font-medium
-              bg-white/[0.06] border border-white/[0.08]
-              text-gray-300 hover:text-white hover:bg-white/[0.1]
+              bg-bg-surface border border-border-default
+              text-text-secondary hover:text-text-primary hover:bg-bg-hover
               transition-all duration-200 cursor-pointer
             "
           >

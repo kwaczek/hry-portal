@@ -52,7 +52,7 @@ export function PrsiCard({
           ? `0 8px 24px ${suitColor}40, 0 0 0 2px ${suitColor}60`
           : playable && suitColor
           ? `0 4px 12px ${suitColor}20`
-          : '0 2px 8px rgba(0,0,0,0.3)',
+          : '0 2px 8px rgba(15,11,8,0.5), 0 1px 3px rgba(15,11,8,0.3)',
       }}
     >
       {faceUp && card ? (

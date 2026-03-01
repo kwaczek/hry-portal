@@ -21,9 +21,9 @@ export function PrsiLobby({ gameState, myPlayerId, error, onReady, onStart, onLe
   return (
     <div className="mx-auto max-w-lg px-4 py-8 animate-[fadeInUp_0.4s_ease-out]">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold font-[family-name:var(--font-display)]">Herní místnost</h2>
+        <h2 className="text-2xl font-bold font-[family-name:var(--font-display)] text-text-primary">Herní místnost</h2>
         <div className="mt-2 flex items-center justify-center gap-2">
-          <code className="text-lg font-mono text-red-400 bg-white/[0.06] px-3 py-1 rounded-lg tracking-wider">
+          <code className="text-lg font-mono text-amber-400 bg-bg-surface px-3 py-1 rounded-lg tracking-wider border border-border-subtle">
             {gameState.roomCode}
           </code>
           <button
@@ -31,7 +31,7 @@ export function PrsiLobby({ gameState, myPlayerId, error, onReady, onStart, onLe
               const url = `${window.location.origin}/prsi/${gameState.roomCode}`;
               navigator.clipboard.writeText(url);
             }}
-            className="p-1.5 rounded-md hover:bg-white/[0.06] text-gray-400 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded-md hover:bg-bg-hover text-text-muted hover:text-text-primary transition-colors cursor-pointer"
             title="Kopírovat odkaz"
           >
             <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -40,25 +40,25 @@ export function PrsiLobby({ gameState, myPlayerId, error, onReady, onStart, onLe
             </svg>
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-gray-500">
+        <p className="mt-1.5 text-xs text-text-faint">
           Sdílej odkaz přátelům pro připojení
         </p>
       </div>
 
       {/* Player list */}
       <div className="space-y-2 mb-6">
-        <p className="text-xs text-gray-500 uppercase tracking-wider">
+        <p className="text-xs text-text-faint uppercase tracking-wider font-[family-name:var(--font-display)]">
           Hráči ({gameState.players.length})
         </p>
         {gameState.players.map((player, idx) => (
           <div
             key={player.id}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-bg-surface border border-border-subtle"
           >
             <Avatar name={player.username} size="sm" />
-            <span className="flex-1 text-sm font-medium text-gray-200 truncate">
+            <span className="flex-1 text-sm font-medium text-text-secondary truncate">
               {player.username}
-              {player.id === myPlayerId && <span className="text-gray-500 ml-1">(ty)</span>}
+              {player.id === myPlayerId && <span className="text-text-faint ml-1">(ty)</span>}
             </span>
             {idx === 0 && <Badge variant="info">Host</Badge>}
             {player.isBot && <Badge>Bot</Badge>}
@@ -74,17 +74,17 @@ export function PrsiLobby({ gameState, myPlayerId, error, onReady, onStart, onLe
         {Array.from({ length: Math.max(0, 2 - gameState.players.length) }).map((_, i) => (
           <div
             key={`empty-${i}`}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed border-white/[0.06]"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed border-border-default"
           >
-            <div className="w-8 h-8 rounded-full bg-white/[0.03] border border-dashed border-white/[0.08]" />
-            <span className="text-sm text-gray-600">Čeká na hráče...</span>
+            <div className="w-8 h-8 rounded-full bg-bg-surface border border-dashed border-border-default" />
+            <span className="text-sm text-text-faint">Čeká na hráče...</span>
           </div>
         ))}
       </div>
 
       {/* Error */}
       {error && (
-        <div className="mb-4 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400 text-center">
+        <div className="mb-4 px-4 py-2 rounded-lg bg-card-red-500/10 border border-card-red-500/20 text-sm text-card-red-400 text-center">
           {error}
         </div>
       )}
