@@ -212,8 +212,13 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
         />
       </div>
 
-      {/* My hand */}
-      <div className="sticky bottom-0 bg-gradient-to-t from-[#08080e] via-[#08080e] to-transparent pt-8 pb-4">
+      {/* My hand + suit picker */}
+      <div className="relative sticky bottom-0 bg-gradient-to-t from-[#08080e] via-[#08080e] to-transparent pt-8 pb-4">
+        {/* Suit picker floats above the hand */}
+        <PrsiSuitPicker
+          open={suitPickerOpen}
+          onPick={handleSuitSelected}
+        />
         <PrsiHand
           hand={myHand}
           gameState={gameState}
@@ -223,12 +228,6 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
           onSuitPick={handleSuitPick}
         />
       </div>
-
-      {/* Suit picker overlay */}
-      <PrsiSuitPicker
-        open={suitPickerOpen}
-        onPick={handleSuitSelected}
-      />
     </div>
   );
 }
