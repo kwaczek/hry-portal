@@ -3,21 +3,22 @@ import type { HTMLAttributes, ReactNode } from 'react';
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   hover?: boolean;
-  glow?: 'red' | 'green' | 'none';
+  glow?: 'amber' | 'green' | 'red' | 'none';
 }
 
 export function Card({ children, hover = false, glow = 'none', className = '', ...props }: CardProps) {
   const glowStyles = {
-    red: 'hover:shadow-red-900/20 hover:border-red-500/15',
-    green: 'hover:shadow-green-900/20 hover:border-green-500/15',
+    amber: 'hover:shadow-amber-900/20 hover:border-amber-400/20',
+    green: 'hover:shadow-felt-800/30 hover:border-felt-500/20',
+    red: 'hover:shadow-card-red-600/20 hover:border-card-red-500/15',
     none: '',
   };
 
   return (
     <div
       className={`
-        rounded-xl bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm
-        ${hover ? 'transition-all duration-300 hover:bg-white/[0.05] hover:shadow-xl cursor-pointer' : ''}
+        rounded-xl bg-bg-card border border-border-subtle
+        ${hover ? 'transition-all duration-300 hover:bg-bg-elevated hover:shadow-xl cursor-pointer' : ''}
         ${glowStyles[glow]}
         ${className}
       `}

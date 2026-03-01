@@ -48,10 +48,10 @@ interface GameCardProps {
 function GameCard({ title, description, href, playable, icon, accentColor, glowColor, playerLabel }: GameCardProps) {
   const content = (
     <div className={`
-      group relative overflow-hidden rounded-2xl border border-white/[0.06]
-      bg-white/[0.02] backdrop-blur-sm
+      group relative overflow-hidden rounded-2xl border border-border-subtle
+      bg-bg-card
       transition-all duration-500
-      ${playable ? 'hover:border-white/[0.12] hover:bg-white/[0.04] hover:shadow-2xl cursor-pointer hover:scale-[1.02]' : 'opacity-60'}
+      ${playable ? 'hover:border-border-strong hover:bg-bg-elevated hover:shadow-2xl cursor-pointer hover:scale-[1.02]' : 'opacity-60'}
     `}
     style={playable ? { '--glow': glowColor } as React.CSSProperties : undefined}
     >
@@ -81,16 +81,16 @@ function GameCard({ title, description, href, playable, icon, accentColor, glowC
         </div>
 
         {/* Text */}
-        <h3 className="text-xl font-bold font-[family-name:var(--font-display)] text-white mb-2">
+        <h3 className="text-xl font-bold font-[family-name:var(--font-display)] text-text-primary mb-2">
           {title}
         </h3>
-        <p className="text-sm text-gray-400 leading-relaxed">
+        <p className="text-sm text-text-muted leading-relaxed">
           {description}
         </p>
 
         {/* Play arrow */}
         {playable && (
-          <div className="mt-6 flex items-center gap-2 text-sm font-medium transition-colors group-hover:text-white" style={{ color: accentColor }}>
+          <div className="mt-6 flex items-center gap-2 text-sm font-medium transition-colors group-hover:text-text-primary" style={{ color: accentColor }}>
             Hrát
             <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
@@ -111,18 +111,18 @@ function GameCard({ title, description, href, playable, icon, accentColor, glowC
 export default function Home() {
   return (
     <div className="relative">
-      {/* Atmospheric background gradients */}
+      {/* Atmospheric background — warm amber glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px]"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(196,30,58,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse at center, rgba(212,160,74,0.06) 0%, transparent 70%)',
           }}
         />
         <div
           className="absolute bottom-0 right-0 w-[600px] h-[500px]"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(45,80,22,0.04) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse at center, rgba(45,107,59,0.03) 0%, transparent 70%)',
           }}
         />
       </div>
@@ -132,22 +132,22 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 text-center">
           {/* Floating suit icons */}
           <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <HeartIcon className="absolute top-8 left-[15%] h-8 w-8 text-red-900/20 animate-[drift_20s_ease-in-out_infinite]" />
-            <LeafIcon className="absolute top-20 right-[20%] h-6 w-6 text-green-900/20 animate-[drift_23s_ease-in-out_infinite_1s]" />
-            <BellIcon className="absolute bottom-4 left-[25%] h-7 w-7 text-amber-800/15 animate-[drift_18s_ease-in-out_infinite_2s]" />
-            <AcornIcon className="absolute bottom-8 right-[15%] h-6 w-6 text-amber-900/15 animate-[drift_22s_ease-in-out_infinite_0.5s]" />
+            <HeartIcon className="absolute top-8 left-[15%] h-8 w-8 text-card-red-500/15 animate-[drift_20s_ease-in-out_infinite]" />
+            <LeafIcon className="absolute top-20 right-[20%] h-6 w-6 text-felt-600/15 animate-[drift_23s_ease-in-out_infinite_1s]" />
+            <BellIcon className="absolute bottom-4 left-[25%] h-7 w-7 text-amber-500/12 animate-[drift_18s_ease-in-out_infinite_2s]" />
+            <AcornIcon className="absolute bottom-8 right-[15%] h-6 w-6 text-amber-700/12 animate-[drift_22s_ease-in-out_infinite_0.5s]" />
           </div>
 
           <div className="relative animate-[fadeInUp_0.6s_ease-out]">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-[family-name:var(--font-display)] tracking-tight leading-[1.1]">
               České hry
               <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-red-500 to-red-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
                 online
               </span>
             </h1>
 
-            <p className="mt-5 text-lg sm:text-xl text-gray-400 max-w-lg mx-auto leading-relaxed">
+            <p className="mt-5 text-lg sm:text-xl text-text-secondary max-w-lg mx-auto leading-relaxed">
               Karetní a deskové hry pro skvělou zábavu.
               <br className="hidden sm:block" />
               Bez registrace, zdarma, česky.
@@ -158,11 +158,11 @@ export default function Home() {
                 href="/prsi"
                 className="
                   inline-flex items-center gap-2.5 rounded-xl
-                  bg-red-600 hover:bg-red-500 px-8 py-3.5
-                  text-base font-semibold text-white
-                  shadow-xl shadow-red-900/25 hover:shadow-red-800/35
+                  bg-amber-400 hover:bg-amber-300 px-8 py-3.5
+                  text-base font-semibold text-bg-root
+                  shadow-xl shadow-amber-900/25 hover:shadow-amber-800/35
                   transition-all duration-300 hover:scale-105
-                  border border-red-500/20
+                  border border-amber-300/20
                 "
               >
                 <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -174,9 +174,9 @@ export default function Home() {
                 href="/zebricek"
                 className="
                   inline-flex items-center gap-2 rounded-xl
-                  bg-white/[0.06] hover:bg-white/[0.1] px-7 py-3.5
-                  text-sm font-medium text-gray-300 hover:text-white
-                  border border-white/[0.08] hover:border-white/[0.14]
+                  bg-bg-elevated hover:bg-bg-hover px-7 py-3.5
+                  text-sm font-medium text-text-secondary hover:text-text-primary
+                  border border-border-default hover:border-border-strong
                   transition-all duration-300
                 "
               >
@@ -190,7 +190,7 @@ export default function Home() {
       {/* Game Grid */}
       <section className="relative pb-20 sm:pb-28">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-sm font-medium text-gray-500 uppercase tracking-widest mb-6 animate-[fadeInUp_0.6s_ease-out_0.1s_both]">
+          <h2 className="text-sm font-medium text-text-muted uppercase tracking-widest mb-6 animate-[fadeInUp_0.6s_ease-out_0.1s_both]">
             Dostupné hry
           </h2>
 
@@ -204,7 +204,7 @@ export default function Home() {
                 playerLabel="2–4 hráči"
                 icon={<HeartIcon className="h-10 w-10" />}
                 accentColor="#c41e3a"
-                glowColor="rgba(196,30,58,0.08)"
+                glowColor="rgba(196,30,58,0.06)"
               />
             </div>
 
@@ -224,7 +224,7 @@ export default function Home() {
                   </svg>
                 }
                 accentColor="#6366f1"
-                glowColor="rgba(99,102,241,0.08)"
+                glowColor="rgba(99,102,241,0.06)"
               />
             </div>
 
@@ -240,8 +240,8 @@ export default function Home() {
                     <rect x="15" y="2" width="18" height="24" rx="2" opacity="0.8" />
                   </svg>
                 }
-                accentColor="#f59e0b"
-                glowColor="rgba(245,158,11,0.08)"
+                accentColor="#d4a04a"
+                glowColor="rgba(212,160,74,0.06)"
               />
             </div>
           </div>

@@ -10,7 +10,7 @@ function CardSuitDecoration({ className }: { className?: string }) {
     <div className={`pointer-events-none select-none ${className}`} aria-hidden>
       {/* Heart / Červený */}
       <svg
-        className="absolute top-[8%] left-[5%] w-24 h-24 text-red-900/20 animate-[drift_20s_ease-in-out_infinite]"
+        className="absolute top-[8%] left-[5%] w-24 h-24 text-card-red-500/12 animate-[drift_20s_ease-in-out_infinite]"
         viewBox="0 0 100 100"
         fill="currentColor"
       >
@@ -18,7 +18,7 @@ function CardSuitDecoration({ className }: { className?: string }) {
       </svg>
       {/* Leaf / Zelený */}
       <svg
-        className="absolute top-[15%] right-[8%] w-20 h-20 text-green-900/20 animate-[drift_25s_ease-in-out_infinite_reverse]"
+        className="absolute top-[15%] right-[8%] w-20 h-20 text-felt-600/12 animate-[drift_25s_ease-in-out_infinite_reverse]"
         viewBox="0 0 100 100"
         fill="currentColor"
       >
@@ -26,7 +26,7 @@ function CardSuitDecoration({ className }: { className?: string }) {
       </svg>
       {/* Bell / Kule */}
       <svg
-        className="absolute bottom-[20%] left-[10%] w-16 h-16 text-amber-800/15 animate-[drift_22s_ease-in-out_2s_infinite]"
+        className="absolute bottom-[20%] left-[10%] w-16 h-16 text-amber-600/10 animate-[drift_22s_ease-in-out_2s_infinite]"
         viewBox="0 0 100 100"
         fill="currentColor"
       >
@@ -35,7 +35,7 @@ function CardSuitDecoration({ className }: { className?: string }) {
       </svg>
       {/* Acorn / Žaludy */}
       <svg
-        className="absolute bottom-[12%] right-[12%] w-18 h-18 text-amber-900/15 animate-[drift_18s_ease-in-out_4s_infinite_reverse]"
+        className="absolute bottom-[12%] right-[12%] w-18 h-18 text-amber-700/10 animate-[drift_18s_ease-in-out_4s_infinite_reverse]"
         viewBox="0 0 100 100"
         fill="currentColor"
       >
@@ -87,9 +87,9 @@ function PrihlaseniContent() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4">
       {/* Atmospheric background */}
-      <div className="fixed inset-0 bg-[#08080e]" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(196,30,58,0.08)_0%,_transparent_50%)]" />
-      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(45,80,22,0.06)_0%,_transparent_50%)]" />
+      <div className="fixed inset-0 bg-bg-root" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,160,74,0.06)_0%,_transparent_50%)]" />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(45,139,80,0.04)_0%,_transparent_50%)]" />
 
       <CardSuitDecoration />
 
@@ -98,21 +98,21 @@ function PrihlaseniContent() {
         className="relative z-10 w-full max-w-md animate-[fadeInUp_0.6s_ease-out]"
       >
         {/* Card glow */}
-        <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-white/[0.08] to-transparent" />
+        <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-amber-400/[0.08] to-transparent" />
 
-        <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.03] p-8 shadow-2xl backdrop-blur-xl sm:p-10">
+        <div className="relative rounded-2xl border border-border-default bg-bg-card p-8 shadow-2xl backdrop-blur-xl sm:p-10">
           {/* Header */}
           <div className="mb-8 text-center">
             <Link
               href="/"
-              className="mb-4 inline-block font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-white transition-colors hover:text-red-400"
+              className="mb-4 inline-block font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-text-primary transition-colors hover:text-amber-400"
             >
               Hry.cz
             </Link>
-            <h1 className="font-[family-name:var(--font-display)] text-xl font-semibold text-white/90">
+            <h1 className="font-[family-name:var(--font-display)] text-xl font-semibold text-text-primary">
               {isSignUp ? 'Vytvořit účet' : 'Přihlášení'}
             </h1>
-            <p className="mt-1.5 text-sm text-white/40">
+            <p className="mt-1.5 text-sm text-text-muted">
               {isSignUp
                 ? 'Zaregistruj se a sleduj svůj pokrok'
                 : 'Přihlas se a hraj s přáteli'}
@@ -122,7 +122,7 @@ function PrihlaseniContent() {
           {/* Google OAuth */}
           <button
             onClick={signInWithGoogle}
-            className="group flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm font-medium text-white/90 transition-all hover:border-white/[0.15] hover:bg-white/[0.07] active:scale-[0.98]"
+            className="group flex w-full items-center justify-center gap-3 rounded-xl border border-border-default bg-bg-elevated px-4 py-3 text-sm font-medium text-text-primary transition-all hover:border-border-strong hover:bg-bg-hover active:scale-[0.98] cursor-pointer"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -147,15 +147,15 @@ function PrihlaseniContent() {
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/[0.06]" />
-            <span className="text-xs uppercase tracking-wider text-white/20">nebo</span>
-            <div className="h-px flex-1 bg-white/[0.06]" />
+            <div className="h-px flex-1 bg-border-subtle" />
+            <span className="text-xs uppercase tracking-wider text-text-faint">nebo</span>
+            <div className="h-px flex-1 bg-border-subtle" />
           </div>
 
           {/* Email form */}
           <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/30">
+              <label htmlFor="email" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-text-muted">
                 E-mail
               </label>
               <input
@@ -166,11 +166,11 @@ function PrihlaseniContent() {
                 required
                 autoComplete="email"
                 placeholder="jan@email.cz"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/20 outline-none transition-all focus:border-red-500/40 focus:ring-1 focus:ring-red-500/20"
+                className="w-full rounded-xl border border-border-default bg-bg-elevated px-4 py-3 text-sm text-text-primary placeholder-text-faint outline-none transition-all focus:border-amber-400/40 focus:ring-1 focus:ring-amber-400/20"
               />
             </div>
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/30">
+              <label htmlFor="password" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-text-muted">
                 Heslo
               </label>
               <input
@@ -181,12 +181,12 @@ function PrihlaseniContent() {
                 required
                 autoComplete={isSignUp ? 'new-password' : 'current-password'}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-sm text-white placeholder-white/20 outline-none transition-all focus:border-red-500/40 focus:ring-1 focus:ring-red-500/20"
+                className="w-full rounded-xl border border-border-default bg-bg-elevated px-4 py-3 text-sm text-text-primary placeholder-text-faint outline-none transition-all focus:border-amber-400/40 focus:ring-1 focus:ring-amber-400/20"
               />
             </div>
 
             {error && (
-              <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-400">
+              <p className="rounded-lg bg-card-red-500/10 px-3 py-2 text-sm text-card-red-400">
                 {error}
               </p>
             )}
@@ -194,7 +194,7 @@ function PrihlaseniContent() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-red-600 to-red-700 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-red-900/20 transition-all hover:from-red-500 hover:to-red-600 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-4 py-3 text-sm font-semibold text-bg-root shadow-lg shadow-amber-900/20 transition-all hover:from-amber-400 hover:to-amber-500 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading
                 ? 'Načítání...'
@@ -205,31 +205,20 @@ function PrihlaseniContent() {
           </form>
 
           {/* Toggle sign up / sign in */}
-          <p className="mt-6 text-center text-sm text-white/30">
+          <p className="mt-6 text-center text-sm text-text-muted">
             {isSignUp ? 'Už máš účet?' : 'Nemáš účet?'}{' '}
             <button
               onClick={() => {
                 setIsSignUp(!isSignUp);
                 setError(null);
               }}
-              className="font-medium text-white/60 underline decoration-white/20 underline-offset-2 transition-colors hover:text-white hover:decoration-white/40"
+              className="font-medium text-text-secondary underline decoration-text-faint underline-offset-2 transition-colors hover:text-text-primary hover:decoration-text-muted cursor-pointer"
             >
               {isSignUp ? 'Přihlásit se' : 'Zaregistrovat se'}
             </button>
           </p>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes drift {
-          0%, 100% { transform: translateY(0) rotate(0deg); }
-          50% { transform: translateY(-15px) rotate(3deg); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   );
 }

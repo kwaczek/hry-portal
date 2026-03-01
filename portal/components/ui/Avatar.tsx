@@ -23,14 +23,14 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-// Generate a warm hue from the name for the gradient
+// Generate a warm pub-toned hue from the name
 function nameToHue(name: string): number {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  // Warm hues: reds (0-30), oranges (30-60), warm purples (280-330)
-  const hues = [0, 15, 30, 45, 280, 300, 320, 340];
+  // Warm hues: amber (30-50), brown-red (10-25), warm green (90-130), deep gold (40-55)
+  const hues = [15, 25, 35, 45, 95, 110, 125, 40];
   return hues[Math.abs(hash) % hues.length];
 }
 
@@ -44,7 +44,7 @@ export function Avatar({ src, name, size = 'md', className = '' }: AvatarProps) 
         alt={name}
         width={pixelSizes[size]}
         height={pixelSizes[size]}
-        className={`${sizeStyles[size]} rounded-full object-cover ring-1 ring-white/[0.08] ${className}`}
+        className={`${sizeStyles[size]} rounded-full object-cover ring-1 ring-amber-400/15 ${className}`}
       />
     );
   }
@@ -53,10 +53,10 @@ export function Avatar({ src, name, size = 'md', className = '' }: AvatarProps) 
 
   return (
     <div
-      className={`${sizeStyles[size]} rounded-full flex items-center justify-center font-semibold ring-1 ring-white/[0.08] ${className}`}
+      className={`${sizeStyles[size]} rounded-full flex items-center justify-center font-semibold ring-1 ring-amber-400/15 ${className}`}
       style={{
-        background: `linear-gradient(135deg, hsl(${hue}, 60%, 30%), hsl(${hue + 30}, 50%, 20%))`,
-        color: `hsl(${hue}, 70%, 80%)`,
+        background: `linear-gradient(135deg, hsl(${hue}, 50%, 25%), hsl(${hue + 20}, 40%, 16%))`,
+        color: `hsl(${hue}, 55%, 72%)`,
       }}
     >
       {getInitials(name)}

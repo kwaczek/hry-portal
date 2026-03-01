@@ -106,31 +106,31 @@ export default function ProfilePage({ params }: PageProps) {
       <div className="mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12">
         {/* Profile skeleton */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-8 animate-pulse">
-          <div className="h-20 w-20 rounded-full bg-white/[0.06]" />
+          <div className="h-20 w-20 rounded-full bg-bg-elevated" />
           <div className="flex-1 space-y-2 text-center sm:text-left">
-            <div className="h-7 w-40 rounded bg-white/[0.06] mx-auto sm:mx-0" />
-            <div className="h-4 w-24 rounded bg-white/[0.04] mx-auto sm:mx-0" />
-            <div className="h-3 w-32 rounded bg-white/[0.03] mx-auto sm:mx-0" />
+            <div className="h-7 w-40 rounded bg-bg-elevated mx-auto sm:mx-0" />
+            <div className="h-4 w-24 rounded bg-bg-card mx-auto sm:mx-0" />
+            <div className="h-3 w-32 rounded bg-bg-card mx-auto sm:mx-0" />
           </div>
         </div>
         {/* Stats skeleton */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 animate-pulse">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-              <div className="h-3 w-12 rounded bg-white/[0.06] mb-2" />
-              <div className="h-6 w-16 rounded bg-white/[0.06]" />
+            <div key={i} className="rounded-xl border border-border-subtle bg-bg-card p-3">
+              <div className="h-3 w-12 rounded bg-bg-elevated mb-2" />
+              <div className="h-6 w-16 rounded bg-bg-elevated" />
             </div>
           ))}
         </div>
         {/* Matches skeleton */}
         <div className="space-y-2 animate-pulse">
-          <div className="h-3 w-28 rounded bg-white/[0.06] mb-3" />
+          <div className="h-3 w-28 rounded bg-bg-elevated mb-3" />
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-              <div className="w-8 h-8 rounded-lg bg-white/[0.06]" />
+            <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border-subtle bg-bg-card">
+              <div className="w-8 h-8 rounded-lg bg-bg-elevated" />
               <div className="flex-1 space-y-1.5">
-                <div className="h-4 w-32 rounded bg-white/[0.06]" />
-                <div className="h-3 w-16 rounded bg-white/[0.04]" />
+                <div className="h-4 w-32 rounded bg-bg-elevated" />
+                <div className="h-3 w-16 rounded bg-bg-card" />
               </div>
             </div>
           ))}
@@ -144,8 +144,8 @@ export default function ProfilePage({ params }: PageProps) {
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <div className="text-6xl opacity-20">?</div>
         <h2 className="text-xl font-bold font-[family-name:var(--font-display)]">Hráč nenalezen</h2>
-        <p className="text-gray-400 text-sm">Uživatel &quot;{decodedUsername}&quot; neexistuje.</p>
-        <Link href="/" className="text-sm text-red-400 hover:text-red-300 transition-colors">
+        <p className="text-text-secondary text-sm">Uživatel &quot;{decodedUsername}&quot; neexistuje.</p>
+        <Link href="/" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
           &larr; Zpět na hlavní stránku
         </Link>
       </div>
@@ -164,7 +164,7 @@ export default function ProfilePage({ params }: PageProps) {
     <div className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden">
       {/* Background atmosphere */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(196,30,58,0.04)_0%,transparent_70%)]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse,rgba(212,160,74,0.04)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12">
@@ -174,7 +174,7 @@ export default function ProfilePage({ params }: PageProps) {
             src={profile.avatar_url}
             name={displayName}
             size="lg"
-            className="!h-20 !w-20 !text-2xl ring-2 ring-white/[0.06]"
+            className="!h-20 !w-20 !text-2xl ring-2 ring-border-default"
           />
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-2">
@@ -183,14 +183,14 @@ export default function ProfilePage({ params }: PageProps) {
               </h1>
               {profile.is_guest && <Badge>Host</Badge>}
             </div>
-            <p className="text-sm text-gray-500 mt-1">@{profile.username}</p>
-            <p className="text-xs text-gray-600 mt-1">
+            <p className="text-sm text-text-muted mt-1">@{profile.username}</p>
+            <p className="text-xs text-text-faint mt-1">
               Členem od {memberSince}
             </p>
             {isOwnProfile && (
               <button
                 onClick={() => setEditing(true)}
-                className="mt-2 text-xs text-gray-500 hover:text-red-400 transition-colors cursor-pointer"
+                className="mt-2 text-xs text-text-muted hover:text-amber-400 transition-colors cursor-pointer"
               >
                 Upravit profil
               </button>
@@ -201,11 +201,11 @@ export default function ProfilePage({ params }: PageProps) {
         {/* Stats grid */}
         {prsiRating && (
           <div className="mb-8 animate-[fadeInUp_0.5s_ease-out]">
-            <h2 className="text-sm text-gray-500 uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
+            <h2 className="text-sm text-text-muted uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
               Prší — Statistiky
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <StatBlock label="Elo" value={prsiRating.elo.toString()} accent="red" />
+              <StatBlock label="Elo" value={prsiRating.elo.toString()} accent="amber" />
               <StatBlock label="Odehráno" value={prsiRating.games_played.toString()} />
               <StatBlock
                 label="Výhry"
@@ -227,20 +227,20 @@ export default function ProfilePage({ params }: PageProps) {
         )}
 
         {!prsiRating && (
-          <div className="mb-8 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 text-center animate-[fadeInUp_0.5s_ease-out]">
-            <p className="text-gray-500 text-sm">Zatím žádné odehrané hry</p>
+          <div className="mb-8 rounded-xl border border-border-subtle bg-bg-card p-6 text-center animate-[fadeInUp_0.5s_ease-out]">
+            <p className="text-text-muted text-sm">Zatím žádné odehrané hry</p>
           </div>
         )}
 
         {/* Recent matches */}
         <div className="animate-[fadeInUp_0.6s_ease-out]">
-          <h2 className="text-sm text-gray-500 uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
+          <h2 className="text-sm text-text-muted uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
             Poslední zápasy
           </h2>
 
           {recentMatches.length === 0 ? (
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 text-center">
-              <p className="text-gray-500 text-sm">Žádné zápasy</p>
+            <div className="rounded-xl border border-border-subtle bg-bg-card p-6 text-center">
+              <p className="text-text-muted text-sm">Žádné zápasy</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -259,38 +259,38 @@ export default function ProfilePage({ params }: PageProps) {
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors
                       ${won
-                        ? 'bg-green-500/[0.03] border-green-500/10'
-                        : 'bg-white/[0.02] border-white/[0.06]'
+                        ? 'bg-felt-500/[0.03] border-felt-500/10'
+                        : 'bg-bg-card border-border-subtle'
                       }
                     `}
                   >
                     <div className={`
                       w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0
                       ${won
-                        ? 'bg-green-500/15 text-green-400'
-                        : 'bg-white/[0.06] text-gray-500'
+                        ? 'bg-felt-500/15 text-felt-300'
+                        : 'bg-bg-elevated text-text-muted'
                       }
                     `}>
                       {me?.placement ?? '—'}.
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-300 truncate">
+                      <p className="text-sm text-text-secondary truncate">
                         vs {opponents.map(o => o.username).join(', ')}
                       </p>
-                      <p className="text-xs text-gray-600 capitalize">{match.game_type}</p>
+                      <p className="text-xs text-text-faint capitalize">{match.game_type}</p>
                     </div>
 
                     {me?.eloChange != null && (
                       <span className={`
                         text-sm font-mono font-medium flex-shrink-0
-                        ${me.eloChange > 0 ? 'text-green-400' : me.eloChange < 0 ? 'text-red-400' : 'text-gray-500'}
+                        ${me.eloChange > 0 ? 'text-felt-300' : me.eloChange < 0 ? 'text-card-red-400' : 'text-text-muted'}
                       `}>
                         {me.eloChange > 0 ? '+' : ''}{me.eloChange}
                       </span>
                     )}
 
-                    <span className="text-xs text-gray-600 flex-shrink-0">{date}</span>
+                    <span className="text-xs text-text-faint flex-shrink-0">{date}</span>
                   </div>
                 );
               })}
@@ -300,7 +300,7 @@ export default function ProfilePage({ params }: PageProps) {
 
         {/* Back link */}
         <div className="mt-8 text-center">
-          <Link href="/zebricek" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+          <Link href="/zebricek" className="text-sm text-text-muted hover:text-text-secondary transition-colors">
             Zobrazit žebříček &rarr;
           </Link>
         </div>
@@ -330,20 +330,20 @@ function StatBlock({
   label: string;
   value: string;
   sub?: string;
-  accent?: 'red' | 'green';
+  accent?: 'amber' | 'green';
 }) {
-  const accentColor = accent === 'red' ? 'text-red-400' : accent === 'green' ? 'text-green-400' : 'text-gray-100';
-  const borderGlow = accent === 'red'
-    ? 'border-red-500/10 bg-red-500/[0.03]'
+  const accentColor = accent === 'amber' ? 'text-amber-400' : accent === 'green' ? 'text-felt-300' : 'text-text-primary';
+  const borderGlow = accent === 'amber'
+    ? 'border-amber-400/10 bg-amber-400/[0.03]'
     : accent === 'green'
-    ? 'border-green-500/10 bg-green-500/[0.03]'
-    : 'border-white/[0.06] bg-white/[0.02]';
+    ? 'border-felt-500/10 bg-felt-500/[0.03]'
+    : 'border-border-subtle bg-bg-card';
 
   return (
     <div className={`rounded-xl border p-3 ${borderGlow}`}>
-      <p className="text-[11px] text-gray-500 uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-[11px] text-text-muted uppercase tracking-wider mb-1">{label}</p>
       <p className={`text-xl font-bold font-[family-name:var(--font-display)] ${accentColor}`}>{value}</p>
-      {sub && <p className="text-[11px] text-gray-600 mt-0.5">{sub}</p>}
+      {sub && <p className="text-[11px] text-text-faint mt-0.5">{sub}</p>}
     </div>
   );
 }

@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import { Outfit, DM_Sans } from 'next/font/google';
+import { Bitter, Source_Sans_3 } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { Navigation } from '@/components/layout/Navigation';
 import './globals.css';
 
-const outfit = Outfit({
+const bitter = Bitter({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-display',
   display: 'swap',
 });
 
-const dmSans = DM_Sans({
+const sourceSans = Source_Sans_3({
   subsets: ['latin', 'latin-ext'],
   variable: '--font-body',
   display: 'swap',
@@ -46,8 +46,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="cs" className={`${outfit.variable} ${dmSans.variable}`}>
-      <body className="bg-[#08080e] text-gray-100 font-[family-name:var(--font-body)] antialiased min-h-screen">
+    <html lang="cs" className={`${bitter.variable} ${sourceSans.variable}`}>
+      <body className="bg-[var(--bg-root)] text-[var(--text-primary)] font-[family-name:var(--font-body)] antialiased min-h-screen">
         <AuthProvider>
           <Navigation />
           <main>{children}</main>

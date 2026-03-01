@@ -32,18 +32,18 @@ export function UpgradePrompt({ onDismiss }: UpgradePromptProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-white/[0.08] bg-gray-900 p-6 shadow-2xl">
-        <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-white">
+      <div className="w-full max-w-sm rounded-2xl border border-border-default bg-bg-elevated p-6 shadow-2xl">
+        <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-text-primary">
           Chceš si uložit svůj pokrok?
         </h2>
-        <p className="mt-1.5 text-sm text-white/40">
+        <p className="mt-1.5 text-sm text-text-muted">
           Zaregistruj se a tvoje výsledky, Elo a historie her se uloží natrvalo.
         </p>
 
         <div className="mt-5 space-y-3">
           <button
             onClick={upgradeWithGoogle}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2.5 text-sm font-medium text-white/90 transition-all hover:border-white/[0.15] hover:bg-white/[0.07]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border-default bg-bg-card px-4 py-2.5 text-sm font-medium text-text-primary transition-all hover:border-border-strong hover:bg-bg-hover cursor-pointer"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
@@ -57,7 +57,7 @@ export function UpgradePrompt({ onDismiss }: UpgradePromptProps) {
           {!showEmail ? (
             <button
               onClick={() => setShowEmail(true)}
-              className="w-full rounded-xl border border-white/[0.06] px-4 py-2.5 text-sm text-white/50 transition-colors hover:text-white/70"
+              className="w-full rounded-xl border border-border-subtle px-4 py-2.5 text-sm text-text-muted transition-colors hover:text-text-secondary cursor-pointer"
             >
               Nebo použít e-mail
             </button>
@@ -69,7 +69,7 @@ export function UpgradePrompt({ onDismiss }: UpgradePromptProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="E-mail"
-                className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-white/20 outline-none focus:border-red-500/40"
+                className="w-full rounded-lg border border-border-default bg-bg-card px-3 py-2 text-sm text-text-primary placeholder-text-faint outline-none focus:border-amber-400/40"
               />
               <input
                 type="password"
@@ -77,15 +77,15 @@ export function UpgradePrompt({ onDismiss }: UpgradePromptProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="Heslo"
-                className="w-full rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white placeholder-white/20 outline-none focus:border-red-500/40"
+                className="w-full rounded-lg border border-border-default bg-bg-card px-3 py-2 text-sm text-text-primary placeholder-text-faint outline-none focus:border-amber-400/40"
               />
               {error && (
-                <p className="text-xs text-red-400">{error}</p>
+                <p className="text-xs text-card-red-400">{error}</p>
               )}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-500 disabled:opacity-50"
+                className="w-full rounded-lg bg-amber-400 px-3 py-2 text-sm font-semibold text-bg-root transition-colors hover:bg-amber-300 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? 'Ukládání...' : 'Zaregistrovat se'}
               </button>
@@ -95,7 +95,7 @@ export function UpgradePrompt({ onDismiss }: UpgradePromptProps) {
 
         <button
           onClick={onDismiss}
-          className="mt-4 w-full text-center text-xs text-white/25 transition-colors hover:text-white/40"
+          className="mt-4 w-full text-center text-xs text-text-faint transition-colors hover:text-text-muted cursor-pointer"
         >
           Teď ne, pokračovat jako host
         </button>

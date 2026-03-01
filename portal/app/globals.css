@@ -1,5 +1,118 @@
 @import "tailwindcss";
 
+/* ============================================
+   HOSPODA THEME — Czech Pub Design System
+   ============================================
+   Warm wood tones, amber glow, green felt,
+   cream text — a modern Czech hospoda.
+   ============================================ */
+
+@theme {
+  /* ---- Background layers (dark wood grain) ---- */
+  --color-bg-root: #0f0b08;
+  --color-bg-surface: #1a1410;
+  --color-bg-elevated: #231c14;
+  --color-bg-card: #1e1711;
+  --color-bg-hover: #2a2118;
+
+  /* ---- Amber / Gold (primary accent — warm light) ---- */
+  --color-amber-50: #fdf8ef;
+  --color-amber-100: #f9edd4;
+  --color-amber-200: #f2d7a4;
+  --color-amber-300: #e8bc6a;
+  --color-amber-400: #d4a04a;
+  --color-amber-500: #c48a2a;
+  --color-amber-600: #a86d1c;
+  --color-amber-700: #8b5318;
+  --color-amber-800: #6e401a;
+  --color-amber-900: #5a3518;
+
+  /* ---- Felt Green (secondary — card table) ---- */
+  --color-felt-50: #effbf3;
+  --color-felt-100: #d0f4dc;
+  --color-felt-200: #a4e8bd;
+  --color-felt-300: #6dd697;
+  --color-felt-400: #3ebe70;
+  --color-felt-500: #2d8b50;
+  --color-felt-600: #1f6b3b;
+  --color-felt-700: #1a5530;
+  --color-felt-800: #174428;
+  --color-felt-900: #133821;
+
+  /* ---- Card Red (Červený suit) ---- */
+  --color-card-red-400: #e8485c;
+  --color-card-red-500: #c41e3a;
+  --color-card-red-600: #a31830;
+
+  /* ---- Text (warm cream spectrum) ---- */
+  --color-text-primary: #f0e6d6;
+  --color-text-secondary: #c4b49e;
+  --color-text-muted: #8c7e6a;
+  --color-text-faint: #5e524a;
+
+  /* ---- Borders (warm tints) ---- */
+  --color-border-subtle: rgba(196, 180, 158, 0.08);
+  --color-border-default: rgba(196, 180, 158, 0.12);
+  --color-border-strong: rgba(196, 180, 158, 0.2);
+  --color-border-amber: rgba(212, 160, 74, 0.25);
+}
+
+/* ---- CSS Custom Properties for non-Tailwind use ---- */
+:root {
+  --bg-root: #0f0b08;
+  --bg-surface: #1a1410;
+  --bg-elevated: #231c14;
+  --bg-card: #1e1711;
+  --bg-hover: #2a2118;
+
+  --text-primary: #f0e6d6;
+  --text-secondary: #c4b49e;
+  --text-muted: #8c7e6a;
+
+  --accent-amber: #d4a04a;
+  --accent-felt: #2d8b50;
+  --accent-red: #c41e3a;
+
+  --border-subtle: rgba(196, 180, 158, 0.08);
+  --border-default: rgba(196, 180, 158, 0.12);
+  --border-strong: rgba(196, 180, 158, 0.2);
+}
+
+/* ============================================
+   TEXTURE & ATMOSPHERE
+   ============================================ */
+
+/* Subtle noise grain for depth */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Warm vignette glow */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    rgba(212, 160, 74, 0.04) 0%,
+    transparent 70%
+  );
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -26,4 +139,41 @@
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.7; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.92; }
+}
+
+@keyframes warmPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 160, 74, 0.1); }
+  50% { box-shadow: 0 0 30px rgba(212, 160, 74, 0.2); }
+}
+
+/* ============================================
+   SCROLLBAR (warm-themed)
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-root);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(196, 180, 158, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(196, 180, 158, 0.25);
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+
+::selection {
+  background: rgba(212, 160, 74, 0.3);
+  color: #f0e6d6;
 }

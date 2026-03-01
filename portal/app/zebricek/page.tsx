@@ -72,7 +72,7 @@ export default function LeaderboardPage() {
     <div className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(196,30,58,0.04)_0%,transparent_70%)]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(212,160,74,0.04)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12">
@@ -80,7 +80,7 @@ export default function LeaderboardPage() {
           <h1 className="text-3xl sm:text-4xl font-bold font-[family-name:var(--font-display)] tracking-tight">
             Žebříček
           </h1>
-          <p className="mt-2 text-gray-400 text-sm">
+          <p className="mt-2 text-text-secondary text-sm">
             Nejlepší hráči Prší — minimum {ELO_MIN_GAMES_FOR_LEADERBOARD} odehraných her
           </p>
         </div>
@@ -91,31 +91,31 @@ export default function LeaderboardPage() {
             <div className="space-y-1 animate-pulse">
               {/* Header skeleton */}
               <div className="flex items-center gap-3 px-4 py-2">
-                <div className="w-8 h-3 rounded bg-white/[0.04]" />
-                <div className="flex-1 h-3 rounded bg-white/[0.04]" />
-                <div className="w-14 h-3 rounded bg-white/[0.04]" />
+                <div className="w-8 h-3 rounded bg-bg-elevated" />
+                <div className="flex-1 h-3 rounded bg-bg-elevated" />
+                <div className="w-14 h-3 rounded bg-bg-elevated" />
               </div>
               {/* Row skeletons */}
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-                  <div className="w-8 h-8 rounded-lg bg-white/[0.06]" />
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border-subtle bg-bg-card">
+                  <div className="w-8 h-8 rounded-lg bg-bg-elevated" />
                   <div className="flex items-center gap-2.5 flex-1">
-                    <div className="w-7 h-7 rounded-full bg-white/[0.06]" />
-                    <div className="h-4 w-24 rounded bg-white/[0.06]" />
+                    <div className="w-7 h-7 rounded-full bg-bg-elevated" />
+                    <div className="h-4 w-24 rounded bg-bg-elevated" />
                   </div>
-                  <div className="w-10 h-4 rounded bg-white/[0.06]" />
+                  <div className="w-10 h-4 rounded bg-bg-elevated" />
                 </div>
               ))}
             </div>
           ) : entries.length === 0 ? (
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-8 text-center">
-              <p className="text-gray-500">Zatím žádní hráči v žebříčku</p>
-              <p className="text-xs text-gray-600 mt-1">Odehraj {ELO_MIN_GAMES_FOR_LEADERBOARD} her pro zařazení</p>
+            <div className="rounded-xl border border-border-subtle bg-bg-card p-8 text-center">
+              <p className="text-text-muted">Zatím žádní hráči v žebříčku</p>
+              <p className="text-xs text-text-faint mt-1">Odehraj {ELO_MIN_GAMES_FOR_LEADERBOARD} her pro zařazení</p>
             </div>
           ) : (
             <>
               {/* Header */}
-              <div className="flex items-center gap-3 px-4 py-2 text-[11px] text-gray-600 uppercase tracking-wider">
+              <div className="flex items-center gap-3 px-4 py-2 text-[11px] text-text-faint uppercase tracking-wider">
                 <span className="w-8 text-center">#</span>
                 <span className="flex-1">Hráč</span>
                 <span className="w-14 text-right">Elo</span>
@@ -138,14 +138,14 @@ export default function LeaderboardPage() {
                       href={`/profil/${encodeURIComponent(entry.profile.username)}`}
                       className={`
                         flex items-center gap-3 px-4 py-3 rounded-xl border transition-all duration-200
-                        hover:bg-white/[0.04] group
+                        hover:bg-bg-hover group
                         ${rank === 1
-                          ? 'border-amber-500/15 bg-amber-500/[0.03]'
+                          ? 'border-amber-400/15 bg-amber-400/[0.03]'
                           : rank === 2
-                          ? 'border-gray-400/10 bg-gray-400/[0.02]'
+                          ? 'border-text-faint/15 bg-text-faint/[0.03]'
                           : rank === 3
                           ? 'border-orange-700/10 bg-orange-700/[0.02]'
-                          : 'border-white/[0.06] bg-white/[0.02]'
+                          : 'border-border-subtle bg-bg-card'
                         }
                       `}
                     >
@@ -153,12 +153,12 @@ export default function LeaderboardPage() {
                       <div className={`
                         w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0
                         ${rank === 1
-                          ? 'bg-amber-500/15 text-amber-400'
+                          ? 'bg-amber-400/15 text-amber-300'
                           : rank === 2
-                          ? 'bg-gray-400/15 text-gray-300'
+                          ? 'bg-text-faint/15 text-text-secondary'
                           : rank === 3
                           ? 'bg-orange-700/15 text-orange-400'
-                          : 'bg-white/[0.04] text-gray-500'
+                          : 'bg-bg-elevated text-text-muted'
                         }
                       `}>
                         {rank}
@@ -172,7 +172,7 @@ export default function LeaderboardPage() {
                           size="sm"
                         />
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-200 truncate group-hover:text-white transition-colors">
+                          <p className="text-sm font-medium text-text-secondary truncate group-hover:text-text-primary transition-colors">
                             {displayName}
                           </p>
                         </div>
@@ -181,18 +181,18 @@ export default function LeaderboardPage() {
                       {/* Elo */}
                       <span className={`
                         w-14 text-right text-sm font-mono font-bold flex-shrink-0
-                        ${rank <= 3 ? 'text-red-400' : 'text-gray-200'}
+                        ${rank <= 3 ? 'text-amber-400' : 'text-text-secondary'}
                       `}>
                         {entry.elo}
                       </span>
 
                       {/* Games */}
-                      <span className="w-12 text-right text-xs text-gray-500 hidden sm:block flex-shrink-0">
+                      <span className="w-12 text-right text-xs text-text-muted hidden sm:block flex-shrink-0">
                         {entry.games_played}
                       </span>
 
                       {/* Win rate */}
-                      <span className="w-14 text-right text-xs text-gray-500 hidden sm:block flex-shrink-0">
+                      <span className="w-14 text-right text-xs text-text-muted hidden sm:block flex-shrink-0">
                         {winRate}%
                       </span>
                     </Link>
@@ -207,7 +207,7 @@ export default function LeaderboardPage() {
                     &larr; Předchozí
                   </Button>
                 )}
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-text-faint">
                   Strana {page + 1}
                 </span>
                 {hasMore && (
@@ -222,7 +222,7 @@ export default function LeaderboardPage() {
 
         {/* Back */}
         <div className="mt-8 text-center">
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+          <Link href="/" className="text-sm text-text-muted hover:text-text-secondary transition-colors">
             &larr; Zpět na hlavní stránku
           </Link>
         </div>

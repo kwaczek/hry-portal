@@ -98,7 +98,7 @@ export function ProfileEditor({ profile, onClose, onSaved }: ProfileEditorProps)
           />
         </div>
         {profile.avatar_url && (
-          <p className="text-center text-xs text-gray-600">
+          <p className="text-center text-xs text-text-faint">
             Avatar se přebírá z Google účtu
           </p>
         )}
@@ -120,7 +120,7 @@ export function ProfileEditor({ profile, onClose, onSaved }: ProfileEditorProps)
         />
 
         {error && (
-          <p className="text-sm text-red-400 text-center">{error}</p>
+          <p className="text-sm text-card-red-400 text-center">{error}</p>
         )}
 
         <div className="flex gap-3 pt-2">

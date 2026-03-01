@@ -103,8 +103,8 @@ export default function PrsiPage() {
     <div className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden">
       {/* Atmospheric background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[radial-gradient(ellipse,rgba(196,30,58,0.06)_0%,transparent_70%)]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(45,122,45,0.05)_0%,transparent_70%)]" />
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[radial-gradient(ellipse,rgba(212,160,74,0.05)_0%,transparent_70%)]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[radial-gradient(ellipse,rgba(45,139,80,0.04)_0%,transparent_70%)]" />
       </div>
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 py-8 sm:py-12">
@@ -117,11 +117,11 @@ export default function PrsiPage() {
             <SuitSymbol suit="zaludy" size={28} />
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold font-[family-name:var(--font-display)] tracking-tight">
-            <span className="bg-gradient-to-r from-red-400 via-amber-300 to-green-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-card-red-400 via-amber-300 to-felt-400 bg-clip-text text-transparent">
               Prší Online
             </span>
           </h1>
-          <p className="mt-3 text-gray-400 max-w-md mx-auto text-sm sm:text-base">
+          <p className="mt-3 text-text-secondary max-w-md mx-auto text-sm sm:text-base">
             Česká karetní klasika. Hraj proti přátelům nebo náhodným soupeřům z celého světa.
           </p>
         </div>
@@ -129,18 +129,18 @@ export default function PrsiPage() {
         {/* Action cards */}
         <div className="grid sm:grid-cols-2 gap-4 max-w-xl mx-auto mb-12 animate-[fadeInUp_0.6s_ease-out]">
           {/* Quick match */}
-          <div className="relative group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 hover:bg-white/[0.04] hover:border-red-500/20 transition-all duration-300">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-red-500/[0.03] to-transparent pointer-events-none" />
+          <div className="relative group rounded-2xl border border-border-subtle bg-bg-card p-6 hover:bg-bg-elevated hover:border-amber-400/20 transition-all duration-300">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-400/[0.03] to-transparent pointer-events-none" />
             <div className="relative">
               <div className="flex items-center gap-3 mb-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20">
-                  <svg className="w-5 h-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/20">
+                  <svg className="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8H1v6.5A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5V8zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" />
                   </svg>
                 </div>
                 <h2 className="text-lg font-bold font-[family-name:var(--font-display)]">Rychlá hra</h2>
               </div>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-text-muted mb-4">
                 Najdi soupeře během pár sekund. Pokud nikdo není, doplní se bot.
               </p>
               {matchmaking ? (
@@ -199,18 +199,18 @@ export default function PrsiPage() {
           </div>
 
           {/* Private room */}
-          <div className="relative group rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 hover:bg-white/[0.04] hover:border-green-500/20 transition-all duration-300">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-green-500/[0.03] to-transparent pointer-events-none" />
+          <div className="relative group rounded-2xl border border-border-subtle bg-bg-card p-6 hover:bg-bg-elevated hover:border-felt-500/20 transition-all duration-300">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-felt-500/[0.03] to-transparent pointer-events-none" />
             <div className="relative">
               <div className="flex items-center gap-3 mb-3">
-                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/20">
-                  <svg className="w-5 h-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-felt-500/10 border border-felt-500/20">
+                  <svg className="w-5 h-5 text-felt-400" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
                   </svg>
                 </div>
                 <h2 className="text-lg font-bold font-[family-name:var(--font-display)]">Soukromá hra</h2>
               </div>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-text-muted mb-4">
                 Vytvoř místnost a pozvi přátele. Sdílej jim kód nebo odkaz.
               </p>
               {needsLogin && anonSignInFailed ? (
@@ -276,7 +276,7 @@ export default function PrsiPage() {
 
         {/* Error */}
         {error && (
-          <div className="max-w-sm mx-auto mb-6 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400 text-center animate-[fadeInUp_0.3s_ease-out]">
+          <div className="max-w-sm mx-auto mb-6 px-4 py-2 rounded-lg bg-card-red-500/10 border border-card-red-500/20 text-sm text-card-red-400 text-center animate-[fadeInUp_0.3s_ease-out]">
             {error}
           </div>
         )}
@@ -311,7 +311,7 @@ export default function PrsiPage() {
           <div className="mt-6 flex justify-center">
             <Link
               href="/"
-              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+              className="text-sm text-text-muted hover:text-text-secondary transition-colors"
             >
               &larr; Zpět na hlavní stránku
             </Link>
@@ -324,14 +324,14 @@ export default function PrsiPage() {
 
 function RuleCard({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <h3 className="font-semibold text-gray-200 mb-2.5 font-[family-name:var(--font-display)]">
+    <div className="rounded-xl border border-border-subtle bg-bg-card p-4">
+      <h3 className="font-semibold text-text-primary mb-2.5 font-[family-name:var(--font-display)]">
         {title}
       </h3>
       <ul className="space-y-1.5">
         {items.map((item, i) => (
-          <li key={i} className="flex gap-2 text-gray-400">
-            <span className="text-red-500/60 mt-0.5 flex-shrink-0">&#x2022;</span>
+          <li key={i} className="flex gap-2 text-text-secondary">
+            <span className="text-amber-400/50 mt-0.5 flex-shrink-0">&#x2022;</span>
             {item}
           </li>
         ))}
