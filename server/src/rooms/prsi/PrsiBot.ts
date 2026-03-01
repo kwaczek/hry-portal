@@ -17,13 +17,8 @@ export class PrsiBot {
     const activeSuit = state.suitOverride ?? topCard.suit;
     const hasPendingDraw = state.pendingDrawCount > 0;
 
-    // When forced to draw from 7 (classic mode — can't stack)
-    if (hasPendingDraw && state.ruleVariant === 'classic') {
-      return { type: 'draw' };
-    }
-
-    // When forced to draw from stacked 7s, try to stack another 7
-    if (hasPendingDraw && state.ruleVariant === 'stacking') {
+    // When 7 is pending, try to stack another 7; otherwise draw penalty
+    if (hasPendingDraw) {
       const seven = hand.find(c => c.rank === '7');
       if (seven) return { type: 'play', card: seven };
       return { type: 'draw' };

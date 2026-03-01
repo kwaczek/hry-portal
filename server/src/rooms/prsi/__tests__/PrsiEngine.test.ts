@@ -240,8 +240,8 @@ describe('PrsiEngine', () => {
     });
   });
 
-  describe('special card: 7 stacking variant', () => {
-    test('playing 7 on 7 stacks draw count', () => {
+  describe('special card: 7 stacking', () => {
+    test('playing 7 on 7 stacks draw count (stacking variant)', () => {
       engine = new PrsiEngine('stacking');
       engine.addPlayer('p1', 'Alice');
       engine.addPlayer('p2', 'Bob');
@@ -260,6 +260,100 @@ describe('PrsiEngine', () => {
       engine.playCard(p2, card('cerveny', '7'));
 
       expect(engine.getState().pendingDrawCount).toBe(4);
+    });
+
+    test('playing 7 on 7 stacks draw count (classic variant)', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays a 7
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', '7'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', '7'));
+
+      // P2 should be able to stack a 7 even in classic mode
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('zeleny', '7'), card('kule', '10')]);
+      const result = engine.playCard(p2, card('zeleny', '7'));
+
+      expect(result.success).toBe(true);
+      expect(engine.getState().pendingDrawCount).toBe(4);
+    });
+
+    test('three 7s stacked results in draw 6', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays a 7
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', '7'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', '7'));
+
+      // P2 stacks a 7
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('zeleny', '7'), card('kule', '10')]);
+      engine.playCard(p2, card('zeleny', '7'));
+
+      // P3 stacks a 7
+      const p3 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p3, [card('kule', '7'), card('zaludy', '10')]);
+      engine.playCard(p3, card('kule', '7'));
+
+      expect(engine.getState().pendingDrawCount).toBe(6);
+    });
+
+    test('player without 7 must draw accumulated penalty', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays a 7
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', '7'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', '7'));
+
+      // P2 has no 7, must draw 2
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('kule', '10')]);
+      const handBefore = engine.getPlayerView(p2).hand!.length;
+      engine.drawCard(p2);
+      const handAfter = engine.getPlayerView(p2).hand!.length;
+
+      expect(handAfter - handBefore).toBe(2);
+      expect(engine.getState().pendingDrawCount).toBe(0);
+    });
+
+    test('non-7 card cannot be played when draw pending', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays a 7
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', '7'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', '7'));
+
+      // P2 tries to play a non-7 card
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('cerveny', '9'), card('kule', '10')]);
+      const result = engine.playCard(p2, card('cerveny', '9'));
+
+      expect(result.success).toBe(false);
     });
 
     test('drawing when 7 pending draws correct number of cards', () => {

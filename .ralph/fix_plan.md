@@ -153,3 +153,20 @@
 - [x] **15.6** Verified on production via Playwright: anonymous user visits `/prsi` → buttons show "Hrát" and "Vytvořit místnost" (not login prompts). Socket.IO connects after Railway cold start. Anonymous sign-in IS enabled in Supabase dashboard.
 - [x] **15.7** `npm run build` (portal + server) succeeds. `npm test` — 72/72 tests pass.
 - [x] **15.8** Deployed to Vercel (hry-portal project at root) with `vercel --prod`. Production URL: https://hry-portal.vercel.app. Verified via Playwright: anonymous user can access `/prsi`, buttons are enabled ("Hrát", "Vytvořit místnost"), no login required. Game server healthy at Railway.
+
+## Phase 16: BUG — Can't stack 7s in Prší (draw penalty)
+
+**Priority:** High — core Prší rule is broken, making the game feel wrong to Czech players.
+
+**Reported behavior:**
+- When an opponent plays a 7 (which forces you to draw 2 cards), you cannot respond by playing your own 7 to stack the penalty (pass 4 cards to the next player)
+- In standard Czech Prší rules, 7s are stackable — if someone plays a 7, you can play another 7 on top, doubling the draw penalty and passing it to the next player
+- Currently the game forces you to draw immediately with no option to counter with your own 7
+
+**Debugging steps:**
+- [x] **16.1** Read `server/src/rooms/prsi/PrsiEngine.ts` — find the `validateMove()` and `playCard()` methods. Check how 7s are handled: is there a `pendingDrawCount` or `drawStack` state? When a 7 is played, does `validateMove()` allow playing another 7 as a response, or does it only allow drawing? Also check `shared/types.ts` for `PrsiRuleVariant` — the "Stacking" variant should enable this.
+- [x] **16.2** Check the existing unit tests in the server for 7-stacking. Read the test file (likely `PrsiEngine.test.ts`). Phase 3.4 says "test stacking 7s" was done — verify those tests actually test the counter-play scenario (player A plays 7, player B plays 7 back, player C must draw 4).
+- [x] **16.3** Fix `PrsiEngine.ts` so that when a 7 is active (pending draw), `validateMove()` also accepts playing a 7 from your hand as a valid move. The draw penalty should accumulate (2 → 4 → 6 etc.) and pass to the next player. Only when a player has no 7 to play do they draw the accumulated penalty.
+- [x] **16.4** Add or fix unit tests for 7-stacking: (a) player plays 7, next player plays 7, third player draws 4; (b) player plays 7, next player has no 7 and draws 2; (c) three 7s stacked = draw 6.
+- [x] **16.5** Test with Playwright — start a local game with a bot, play a 7, verify the UI shows your remaining 7s as playable (highlighted/clickable) instead of forcing a draw. Verify the draw counter shows the stacked amount.
+- [x] **16.6** Run `npm run build` and `npm test` — all must pass. Deploy server to Railway with `railway up` and portal to Vercel with `vercel --prod`. Test on production.

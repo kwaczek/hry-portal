@@ -203,18 +203,14 @@ export class PrsiEngine {
   }
 
   private isValidPlay(card: Card): boolean {
-    // Svršek can be played on anything
-    if (card.rank === 'svrsek') return true;
-
-    // When 7 is pending in stacking mode, only a 7 can be played
-    if (this.pendingDrawCount > 0 && this.ruleVariant === 'stacking') {
+    // When 7 is pending, only a 7 can be played (to stack the penalty)
+    // This is standard Czech Prší behavior regardless of variant
+    if (this.pendingDrawCount > 0) {
       return card.rank === '7';
     }
 
-    // When 7 is pending in classic mode, must draw (no play allowed)
-    if (this.pendingDrawCount > 0 && this.ruleVariant === 'classic') {
-      return false;
-    }
+    // Svršek can be played on anything (but not when 7 is pending)
+    if (card.rank === 'svrsek') return true;
 
     const top = this.topCard!;
     const activeSuit = this.suitOverride ?? top.suit;

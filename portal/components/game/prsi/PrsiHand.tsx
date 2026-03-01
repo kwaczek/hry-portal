@@ -16,13 +16,13 @@ interface PrsiHandProps {
 function canPlayCard(card: Card, state: PrsiGameState): boolean {
   if (state.phase !== 'playing') return false;
 
-  // Svršek can always be played
-  if (card.rank === 'svrsek') return true;
-
   // If there's a pending draw count (stacked 7s), only 7 can be played
   if (state.pendingDrawCount > 0) {
     return card.rank === '7';
   }
+
+  // Svršek can always be played (but not when 7 is pending)
+  if (card.rank === 'svrsek') return true;
 
   // If there's a suit override, must match that suit (or play svrsek)
   if (state.suitOverride) {
