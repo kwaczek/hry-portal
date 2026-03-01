@@ -21,7 +21,12 @@ function canPlayCard(card: Card, state: PrsiGameState): boolean {
     return card.rank === '7';
   }
 
-  // Svršek can always be played (but not when 7 is pending)
+  // If there's a pending skip (Eso), only another Eso can be played to counter
+  if (state.pendingSkipCount > 0) {
+    return card.rank === 'eso';
+  }
+
+  // Svršek can always be played (but not when 7 or Eso is pending)
   if (card.rank === 'svrsek') return true;
 
   // If there's a suit override, must match that suit (or play svrsek)
@@ -117,6 +122,8 @@ export function PrsiHand({ hand, gameState, isMyTurn, onPlayCard, onDrawCard, on
           >
             {gameState.pendingDrawCount > 0
               ? `Líznout ${gameState.pendingDrawCount} karet`
+              : gameState.pendingSkipCount > 0
+              ? 'Líznout a přeskočit'
               : 'Líznout kartu'}
           </button>
         </div>

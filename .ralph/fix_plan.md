@@ -170,3 +170,50 @@
 - [x] **16.4** Add or fix unit tests for 7-stacking: (a) player plays 7, next player plays 7, third player draws 4; (b) player plays 7, next player has no 7 and draws 2; (c) three 7s stacked = draw 6.
 - [x] **16.5** Test with Playwright — start a local game with a bot, play a 7, verify the UI shows your remaining 7s as playable (highlighted/clickable) instead of forcing a draw. Verify the draw counter shows the stacked amount.
 - [x] **16.6** Run `npm run build` and `npm test` — all must pass. Deploy server to Railway with `railway up` and portal to Vercel with `vercel --prod`. Test on production.
+
+## Phase 17: BUG — Ace stacking, timer, and suit picker UX
+
+**Priority:** High — multiple game mechanics are broken or confusing, making Prší frustrating to play.
+
+**Reported behavior:**
+1. **Ace stacking doesn't work** — When an opponent plays an Eso (Ace, skip turn), you should be able to counter with your own Eso to pass the skip to the next player (same stacking mechanic as 7s). Currently this doesn't work.
+2. **Timer doesn't work** — The 30-second turn timer is either not visible or not counting down. Players don't feel time pressure and may not realize they're on the clock.
+3. **Can't see my cards during suit picker** — When playing Svršek (Jack) and the suit picker modal appears, the player's hand is hidden or obscured. You need to see your cards to make an informed suit choice.
+4. **No clear turn indicator** — It's not obvious whose turn it is. There's no highlight, animation, or label showing the active player. New players get confused about when to act.
+
+**Debugging steps:**
+- [x] **17.1** **Ace stacking:** Read `PrsiEngine.ts` — check how Eso/Ace is handled. Similar to 7-stacking, when an Ace is active (skip pending), `validateMove()` should allow playing another Ace to pass the skip. Add `pendingSkipCount` or similar state. Fix the engine and add unit tests: (a) A plays Ace, B plays Ace, C is skipped; (b) A plays Ace, B has no Ace, B is skipped.
+- [ ] **17.2** **Timer visibility:** Check `PrsiTable.tsx` or the game UI component — is there a visible countdown timer? Check if the server emits `timer:tick` events and if the client renders them. The timer should be a prominent visual element (countdown number or progress bar) near the active player. If missing, add it.
+- [ ] **17.3** **Suit picker cards hidden:** Read `PrsiSuitPicker.tsx` and how it overlays the game. The modal should NOT cover the player's hand. Fix: either make the suit picker a non-blocking overlay (positioned above the hand area), or show a mini version of the player's hand inside the picker, or use a bottom sheet that doesn't cover the hand.
+- [ ] **17.4** **Turn indicator:** Add a clear visual indicator for whose turn it is. Options: glowing border around active player's area, animated arrow or spotlight, "Tvůj tah!" text overlay on the player's hand, pulsing highlight on the active player's name. Must be obvious even to first-time players.
+- [ ] **17.5** Test all 4 fixes with Playwright — verify ace stacking works, timer counts down visibly, cards visible during suit picker, and active player is clearly indicated. Take screenshots.
+- [ ] **17.6** Run `npm run build` and `npm test` — all must pass. Deploy to Railway + Vercel. Test on production.
+
+## Phase 18: REDESIGN — "Hospoda" theme for game portal
+
+**Priority:** High — the portal looks generic and dated. Needs a complete visual overhaul to feel like a modern, inviting Czech pub game experience.
+
+**Reported behavior:**
+- The overall graphic style looks 20 years old, like an "encyclopedia of insects"
+- Not visually catchy or inviting for a gaming portal
+- Homepage doesn't convey "fun Czech card games" at all
+- Needs a strong visual identity that makes players want to stay and play
+
+**Design direction: "Hospoda" (Czech pub) theme**
+- The portal is about Czech pub card/board games (Prší, and more to come)
+- Visual theme should evoke a cozy Czech pub: warm wood textures, dim ambient lighting feel, beer-stained card table, chalk menu boards, vintage Czech tavern aesthetic
+- But MODERN execution — clean typography, smooth animations, responsive, not literally a skeuomorphic pub
+- Think: warm dark palette (deep browns, amber, cream, forest green accents), card/felt textures as subtle backgrounds, playful Czech typography
+- Homepage should feel like walking into a hospoda and seeing game tables — each game is a "table" you can join
+
+**INVOKE `/frontend-design:frontend-design` for this entire phase — this is a major visual overhaul.**
+
+**Implementation steps:**
+- [ ] **18.1** **Design system overhaul** — INVOKE `/frontend-design:frontend-design`. Create a new color palette, typography scale, and component theme based on the hospoda concept. Update `tailwind.config.ts` with new design tokens: colors (wood brown, amber, cream, pub green, card red), fonts (a Czech-friendly display font + clean body font), border-radius, shadows. Create or update `globals.css` with texture backgrounds and ambient styling.
+- [ ] **18.2** **Homepage redesign** — Rebuild `/` (homepage). Hero: large welcoming area with portal name and tagline ("Česká hospodská hra online" or similar). Game cards as "pub tables" — each game shown as an inviting card/table you can sit at, with player count badge, "Hrát" CTA. Active players count. The 2-3 "Připravujeme" placeholders should look like empty tables with "Brzy" signs. Mobile-first, responsive.
+- [ ] **18.3** **Prší landing page redesign** — Rebuild `/prsi` with the hospoda theme. Game rules section styled like a chalk board or pub menu. "Rychlá hra" and "Vytvořit místnost" as prominent, inviting CTAs. Mini leaderboard styled as a pub scoreboard.
+- [ ] **18.4** **Navigation & layout overhaul** — Update the root layout, nav bar, and footer with the new theme. Nav should feel integrated, not generic. Footer with hospoda-style credits. Smooth page transitions.
+- [ ] **18.5** **Game room visual polish** — Update the Prší game table UI (`PrsiTable.tsx`, `PrsiHand.tsx`, `PrsiCard.tsx`) to match the hospoda theme. Card table should feel like a green felt pub table. Cards should have subtle shadows and tactile feel. Chat area styled like pub banter.
+- [ ] **18.6** **Profile & leaderboard polish** — Update `/profil/[username]` and `/zebricek` with the new theme. Leaderboard as a pub championship board. Profile cards with hospoda styling.
+- [ ] **18.7** Test full portal with Playwright — take screenshots of every page. Verify responsive on mobile (375px) and desktop (1440px). Check for visual consistency, no broken layouts, all text readable.
+- [ ] **18.8** Run `npm run build` and `npm test` — all must pass. Deploy to Vercel + Railway. Verify on production.

@@ -25,6 +25,7 @@ export class PrsiEngine {
   private discardPile: Card[] = [];
   private suitOverride: Suit | null = null;
   private pendingDrawCount = 0;
+  private pendingSkipCount = 0;
   private winnerId: string | null = null;
   private placements: string[] = [];
 
@@ -110,6 +111,7 @@ export class PrsiEngine {
       drawPileCount: this.drawPile.length,
       suitOverride: this.suitOverride,
       pendingDrawCount: this.pendingDrawCount,
+      pendingSkipCount: this.pendingSkipCount,
       turnTimeRemaining: 30,
       ruleVariant: this.ruleVariant,
       winnerId: this.winnerId,
@@ -196,7 +198,7 @@ export class PrsiEngine {
 
     // Advance turn (if game not ended)
     if (this.phase === 'playing') {
-      this.advanceTurn(card.rank === 'eso');
+      this.advanceTurn(false);
     }
 
     return { success: true };
@@ -209,7 +211,12 @@ export class PrsiEngine {
       return card.rank === '7';
     }
 
-    // Svršek can be played on anything (but not when 7 is pending)
+    // When Eso skip is pending, only another Eso can be played (to counter/stack)
+    if (this.pendingSkipCount > 0) {
+      return card.rank === 'eso';
+    }
+
+    // Svršek can be played on anything (but not when 7 or Eso is pending)
     if (card.rank === 'svrsek') return true;
 
     const top = this.topCard!;
@@ -229,10 +236,13 @@ export class PrsiEngine {
       case '7':
         this.pendingDrawCount += 2;
         break;
+      case 'eso':
+        // Counter-Eso passes the skip forward (doesn't accumulate)
+        this.pendingSkipCount = 1;
+        break;
       case 'svrsek':
         this.suitOverride = suitOverride ?? null;
         break;
-      // Eso skip is handled in advanceTurn
     }
   }
 
@@ -265,6 +275,7 @@ export class PrsiEngine {
     }
 
     this.pendingDrawCount = 0;
+    this.pendingSkipCount = 0;
     this.advanceTurn(false);
 
     return { success: true };

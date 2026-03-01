@@ -125,6 +125,13 @@ export function PrsiTable({ gameState, myPlayerId, onDrawCard, isMyTurn }: PrsiT
         </div>
       )}
 
+      {/* Pending skip (Eso) indicator */}
+      {gameState.pendingSkipCount > 0 && (
+        <div className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-medium text-amber-400">
+          Eso — zahraj Eso nebo budeš přeskočen!
+        </div>
+      )}
+
       {/* Turn timer */}
       {gameState.phase === 'playing' && gameState.turnTimeRemaining > 0 && (
         <div className="flex items-center gap-2">

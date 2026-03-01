@@ -349,6 +349,7 @@ export class PrsiRoom {
         drawPileCount: 0,
         suitOverride: null,
         pendingDrawCount: 0,
+        pendingSkipCount: 0,
         turnTimeRemaining: 0,
         ruleVariant: this.room.config.ruleVariant,
         winnerId: null,

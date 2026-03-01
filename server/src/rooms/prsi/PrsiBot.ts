@@ -24,6 +24,13 @@ export class PrsiBot {
       return { type: 'draw' };
     }
 
+    // When Eso skip is pending, try to counter with an Eso; otherwise draw (accept skip)
+    if (state.pendingSkipCount > 0) {
+      const eso = hand.find(c => c.rank === 'eso');
+      if (eso) return { type: 'play', card: eso };
+      return { type: 'draw' };
+    }
+
     const playable = hand.filter(c => this.canPlay(c, topCard, activeSuit));
 
     if (playable.length === 0) return { type: 'draw' };

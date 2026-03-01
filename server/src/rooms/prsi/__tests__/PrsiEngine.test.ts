@@ -380,7 +380,7 @@ describe('PrsiEngine', () => {
   });
 
   describe('special card: Eso (skip next)', () => {
-    test('playing Eso skips next player', () => {
+    test('playing Eso sets pending skip — next player gets turn to counter or accept', () => {
       engine = new PrsiEngine('classic');
       engine.addPlayer('p1', 'Alice');
       engine.addPlayer('p2', 'Bob');
@@ -389,19 +389,36 @@ describe('PrsiEngine', () => {
 
       engine['_forceTopCard'](card('cerveny', '8'));
 
-      const currentId = engine.getState().currentPlayerId!;
-      engine['_forcePlayerHand'](currentId, [card('cerveny', 'eso'), card('zeleny', '9')]);
-      engine.playCard(currentId, card('cerveny', 'eso'));
+      // P1 plays Eso — P2 should get the turn (with pending skip)
+      engine['_forcePlayerHand']('p1', [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard('p1', card('cerveny', 'eso'));
 
-      // Should skip one player
-      const state = engine.getState();
-      const players = state.players.map(p => p.id);
-      const currentIdx = players.indexOf(currentId);
-      const expectedNextIdx = (currentIdx + 2) % players.length;
-      expect(state.currentPlayerId).toBe(players[expectedNextIdx]);
+      // P2 gets the turn to counter or accept the skip
+      expect(engine.getState().currentPlayerId).toBe('p2');
+      expect(engine.getState().pendingSkipCount).toBe(1);
     });
 
-    test('eso skips in 2-player game (back to same player)', () => {
+    test('eso skip in 3-player — P2 draws and is skipped, turn goes to P3', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso
+      engine['_forcePlayerHand']('p1', [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard('p1', card('cerveny', 'eso'));
+
+      // P2 has no Eso, draws — gets skipped, turn goes to P3
+      engine['_forcePlayerHand']('p2', [card('kule', '10')]);
+      engine.drawCard('p2');
+
+      expect(engine.getState().currentPlayerId).toBe('p3');
+    });
+
+    test('eso in 2-player — P2 gets turn, draws and is skipped, back to P1', () => {
       engine = new PrsiEngine('classic');
       engine.addPlayer('p1', 'Alice');
       engine.addPlayer('p2', 'Bob');
@@ -409,12 +426,165 @@ describe('PrsiEngine', () => {
 
       engine['_forceTopCard'](card('cerveny', '8'));
 
-      const currentId = engine.getState().currentPlayerId!;
-      engine['_forcePlayerHand'](currentId, [card('cerveny', 'eso'), card('zeleny', '9')]);
-      engine.playCard(currentId, card('cerveny', 'eso'));
+      // P1 plays Eso
+      engine['_forcePlayerHand']('p1', [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard('p1', card('cerveny', 'eso'));
 
-      // In 2-player, skip means it comes back to same player
-      expect(engine.getState().currentPlayerId).toBe(currentId);
+      // P2 gets the turn with pending skip
+      expect(engine.getState().currentPlayerId).toBe('p2');
+
+      // P2 draws and is skipped — back to P1
+      engine.drawCard('p2');
+      expect(engine.getState().currentPlayerId).toBe('p1');
+    });
+  });
+
+  describe('special card: Eso stacking (counter-Eso)', () => {
+    test('player can counter Eso with their own Eso to pass skip forward', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso — should set pending skip
+      engine['_forcePlayerHand']('p1', [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard('p1', card('cerveny', 'eso'));
+
+      // P2 should be able to counter with their own Eso
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('zeleny', 'eso'), card('kule', '10')]);
+      const result = engine.playCard(p2, card('zeleny', 'eso'));
+
+      expect(result.success).toBe(true);
+      // Skip passed to P3 — P3 gets turn with pending skip
+      expect(engine.getState().currentPlayerId).toBe('p3');
+      expect(engine.getState().pendingSkipCount).toBe(1);
+
+      // P3 has no Eso, draws — skipped, turn goes to P1
+      engine['_forcePlayerHand']('p3', [card('kule', '10')]);
+      engine.drawCard('p3');
+      expect(engine.getState().currentPlayerId).toBe('p1');
+    });
+
+    test('player without Eso is skipped when Eso is pending', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', 'eso'));
+
+      // P2 has no Eso — should be skipped. Drawing should skip and go to P3
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('kule', '10'), card('zaludy', '8')]);
+      engine.drawCard(p2);
+
+      // P2 is skipped, so turn goes to P3
+      expect(engine.getState().currentPlayerId).toBe('p3');
+    });
+
+    test('non-Eso card cannot be played when Eso is pending', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', 'eso'));
+
+      // P2 tries to play a non-Eso card — should be rejected
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('cerveny', '9'), card('kule', '10')]);
+      const result = engine.playCard(p2, card('cerveny', '9'));
+
+      expect(result.success).toBe(false);
+    });
+
+    test('two Esos stacked — third player is skipped', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.addPlayer('p3', 'Charlie');
+      engine.addPlayer('p4', 'Dana');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', 'eso'));
+
+      // P2 counters with Eso
+      const p2 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p2, [card('zeleny', 'eso'), card('kule', '10')]);
+      engine.playCard(p2, card('zeleny', 'eso'));
+
+      // P3 has no Eso, draws and is skipped
+      const p3 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p3, [card('kule', '10'), card('zaludy', '8')]);
+      engine.drawCard(p3);
+
+      // Turn should go to P4 (P3 is skipped)
+      expect(engine.getState().currentPlayerId).toBe('p4');
+    });
+
+    test('Eso stacking in 2-player game — counter passes skip back', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // P1 plays Eso → pending skip, P2's turn
+      engine['_forcePlayerHand']('p1', [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard('p1', card('cerveny', 'eso'));
+      expect(engine.getState().currentPlayerId).toBe('p2');
+
+      // P2 counters with Eso → pending skip passes back to P1
+      engine['_forcePlayerHand']('p2', [card('zeleny', 'eso'), card('kule', '10')]);
+      engine.playCard('p2', card('zeleny', 'eso'));
+      expect(engine.getState().currentPlayerId).toBe('p1');
+      expect(engine.getState().pendingSkipCount).toBe(1);
+
+      // P1 draws — skipped, turn goes to P2
+      engine.drawCard('p1');
+      expect(engine.getState().currentPlayerId).toBe('p2');
+    });
+
+    test('pendingSkipCount exposed in game state', () => {
+      engine = new PrsiEngine('classic');
+      engine.addPlayer('p1', 'Alice');
+      engine.addPlayer('p2', 'Bob');
+      engine.startGame();
+
+      engine['_forceTopCard'](card('cerveny', '8'));
+
+      // Initially no pending skip
+      expect(engine.getState().pendingSkipCount).toBe(0);
+
+      // P1 plays Eso
+      const p1 = engine.getState().currentPlayerId!;
+      engine['_forcePlayerHand'](p1, [card('cerveny', 'eso'), card('zeleny', '9')]);
+      engine.playCard(p1, card('cerveny', 'eso'));
+
+      // Should have pending skip
+      expect(engine.getState().pendingSkipCount).toBe(1);
     });
   });
 

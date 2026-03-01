@@ -34,6 +34,7 @@ export interface PrsiGameState {
   drawPileCount: number;
   suitOverride: Suit | null; // set when Svršek is played
   pendingDrawCount: number; // stacked 7s
+  pendingSkipCount: number; // stacked Esos
   turnTimeRemaining: number;
   ruleVariant: PrsiRuleVariant;
   winnerId: string | null;
