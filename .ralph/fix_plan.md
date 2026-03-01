@@ -124,3 +124,32 @@
 - [x] **14.4** Trace the client-side connection flow. Read `portal/hooks/useSocket.ts` and `portal/hooks/useGame.ts` — add temporary console.logs or use Playwright to check what happens after clicking "Hrát": does Socket.IO connect? Does it emit `matchmaking:join`? Does it receive `room:created`? Identify where the flow breaks.
 - [x] **14.5** Trace the server-side room creation flow. Check `server/src/index.ts` socket event handlers, `server/src/rooms/RoomManager.ts`, and `server/src/services/matchmaking.ts`. Verify the server handles incoming events and creates rooms. Check Redis connectivity (Upstash) since matchmaking depends on it.
 - [x] **14.6** Fix the identified issue(s), redeploy both services, and verify a game can be played end-to-end. Test both "Rychlá hra" and "Vytvořit místnost" flows. Only mark complete when a room loads and a game starts successfully.
+
+## Phase 15: BUG — Anonymous users forced to login to play Prší
+
+**Priority:** High — the design spec says anonymous/guest users can play without registering, but the app requires login.
+
+**Reported behavior:**
+- Visiting `/prsi` and clicking "Hrát" (Rychlá hra) forces the user to log in
+- The design (PROMPT.md Phase 2, task 2.6) specifies anonymous sessions: auto-create Supabase anonymous session on first visit, `is_guest: true`, so guests can play immediately
+- Users should be able to play without registering — registration prompt should only appear AFTER their first game ("Chceš si uložit svůj pokrok? Zaregistruj se!")
+- This is blocking: new visitors can't try the game at all without signing up first
+
+**NOTE from Phase 13.4:** "Two manual blockers remain: (1) Enable anonymous sign-in in Supabase dashboard". This may be the root cause — anonymous sign-in was never enabled in the Supabase project settings.
+
+**Step 1: Systematic debugging — INVOKE `/superpowers:systematic-debugging`**
+
+- [x] **15.1** Check if Supabase anonymous sign-in is enabled. Root cause confirmed: `signInAnonymously()` is called in `AuthProvider.tsx:77` but fails because anonymous sign-in is disabled in Supabase dashboard. When it fails, `session` stays `null`, causing `needsLogin=true` in the Prší page.
+- [x] **15.2** Traced all 5 gates blocking anonymous users: (1) `AuthProvider.tsx:77` anon sign-in fails, (2) `prsi/page.tsx:100` `needsLogin` shows login button, (3) `prsi/page.tsx:199` private room redirects to login, (4) `PrsiRoom.tsx:72` shows "Pro hru je potřeba se přihlásit", (5) `useSocket.ts:18` won't connect without `session.access_token`.
+- [x] **15.3** Root cause: Anonymous sign-in is disabled in Supabase dashboard. MANUAL ACTION REQUIRED: Supabase Dashboard → Authentication → Settings → Enable Anonymous Sign-Ins. Code changes deployed to improve UX when anon sign-in fails (retry button + clear Czech error message).
+
+**Step 2: Code review — INVOKE `/superpowers:requesting-code-review`**
+
+- [x] **15.4** Reviewed full anonymous flow. The code chain is correct: AuthProvider → signInAnonymously → session → useSocket sends JWT → server auth middleware accepts anon tokens (isGuest=true). The ONLY broken link is Supabase dashboard config — anonymous sign-in is disabled. Once enabled, the entire chain works.
+
+**Step 3: Fix and verify — INVOKE `/superpowers:verification-before-completion`**
+
+- [x] **15.5** Added `anonSignInFailed` state + `retryAnonSignIn()` to AuthProvider. Updated Prší page and PrsiRoom to show "Hostovský přístup je dočasně nedostupný" with retry button + login fallback when anon sign-in fails. MANUAL ACTION REQUIRED: Go to Supabase dashboard → Authentication → Settings → Enable Anonymous Sign-Ins.
+- [x] **15.6** Verified on production via Playwright: anonymous user visits `/prsi` → buttons show "Hrát" and "Vytvořit místnost" (not login prompts). Socket.IO connects after Railway cold start. Anonymous sign-in IS enabled in Supabase dashboard.
+- [x] **15.7** `npm run build` (portal + server) succeeds. `npm test` — 72/72 tests pass.
+- [x] **15.8** Deployed to Vercel (hry-portal project at root) with `vercel --prod`. Production URL: https://hry-portal.vercel.app. Verified via Playwright: anonymous user can access `/prsi`, buttons are enabled ("Hrát", "Vytvořit místnost"), no login required. Game server healthy at Railway.
