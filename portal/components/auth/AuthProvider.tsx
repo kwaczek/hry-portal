@@ -74,8 +74,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setLoading(false);
       } else if (!anonSignInAttempted.current) {
         anonSignInAttempted.current = true;
-        await supabase.auth.signInAnonymously();
-        // State will be updated via onAuthStateChange
+        const { error } = await supabase.auth.signInAnonymously();
+        if (error) {
+          // Anonymous sign-in may be disabled in Supabase dashboard.
+          // Stop loading so the UI can still render (login prompt instead of spinner).
+          console.warn('Anonymous sign-in failed:', error.message);
+          setLoading(false);
+        }
+        // On success, state will be updated via onAuthStateChange
       }
     });
 

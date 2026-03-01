@@ -91,3 +91,36 @@
 - [x] **12.2** Deploy portal to Vercel — run `vercel` to link and deploy. Configure root directory to `portal/`, set environment variables. Verify build succeeds, auth flow works, Socket.IO connects to Railway server
 - [x] **12.3** Smoke test production — test full flow on deployed URLs: auth, quick match, private room, gameplay, chat, results, profile, leaderboard. Verify CORS, WebSocket, and Supabase connections all work in production
 - [x] **12.4** Update .env with production URLs — set `NEXT_PUBLIC_GAME_SERVER_URL` to Railway production URL. Redeploy portal if needed
+
+## Phase 13: Production Integration Testing & Fixes
+
+- [x] **13.1** Verify all Vercel environment variables are set. Run `vercel env ls` and confirm these exist for Production: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_GAME_SERVER_URL`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `NEXT_PUBLIC_UMAMI_URL`, `UMAMI_API_KEY`. Add any missing ones via `vercel env add`. Redeploy with `vercel --prod` after adding.
+- [ ] **13.2** Verify Railway game server WebSocket connectivity. Use Playwright on production (`https://hry-portal.vercel.app`): navigate to `/prsi`, check browser console for Socket.IO connection errors. If CORS errors appear, fix the server's CORS config to allow the Vercel production domain. Redeploy server with `railway up` if changed.
+- [ ] **13.3** Test Supabase auth on production. Navigate to login page, attempt email registration, verify it works (check for localhost redirect bug — if `redirectTo` uses localhost, fix to use `window.location.origin` or `NEXT_PUBLIC_SITE_URL` env var). Set Supabase Site URL in dashboard to `https://hry-portal.vercel.app` if not already done (note: this requires manual dashboard access, so just ensure the code uses dynamic origin).
+- [ ] **13.4** End-to-end game flow test on production. Open two Playwright browser tabs on `https://hry-portal.vercel.app`. Tab 1: log in, go to `/prsi`, click "Rychlá hra". Tab 2: log in as different user, click "Rychlá hra". Verify: matchmaking connects both players, game room loads, cards are dealt, a player can play a card, turns alternate, game completes, results shown, Elo updates. If any step fails, debug with `/superpowers:systematic-debugging` and fix.
+- [ ] **13.5** Fix any issues found in 13.1–13.4, redeploy both services, and re-verify. Only mark complete when a full game can be played end-to-end on production URLs.
+
+## Phase 14: BUG — Game room stuck on "Načítání herní místnosti..." spinner
+
+**Priority:** Critical — the game is completely unplayable in production.
+
+**Reported behavior:**
+- Clicking "Hrát" (Rychlá hra / quick match) or "Vytvořit místnost" (private room) navigates to a room URL but shows only an infinite spinner with text "Načítání herní místnosti..."
+- No room loads, no players connect, no game starts — just the spinner forever
+- Tested on production: https://hry-portal.vercel.app
+- Screenshots attached to commit
+
+**Likely causes (investigate in order):**
+1. Game server on Railway may be down or sleeping — check `railway logs` and hit the `/health` endpoint on the Railway URL
+2. `NEXT_PUBLIC_GAME_SERVER_URL` env var on Vercel may be missing or wrong — run `vercel env ls` and verify it points to the live Railway URL
+3. Socket.IO connection failing due to CORS — the server may not allow the Vercel production domain. Check browser console for CORS or WebSocket errors
+4. Socket.IO handshake failing due to auth — the Supabase JWT may not be sent or may be expired/invalid. Check if anonymous session is created properly
+5. Matchmaking/room creation failing silently — the server may connect but the room:create or matchmaking:join event may error without feedback to the client
+
+**Debugging steps:**
+- [x] **14.1** Check if Railway game server is running. Run `railway logs` in the server workspace. Curl the `/health` endpoint. If server is down, redeploy with `railway up` and verify it starts.
+- [x] **14.2** Verify `NEXT_PUBLIC_GAME_SERVER_URL` on Vercel. Run `vercel env ls`. If missing or pointing to localhost, set it to the Railway production URL and redeploy with `vercel --prod`.
+- [x] **14.3** Test WebSocket connectivity. Use Playwright to open `/prsi`, click "Hrát", and check `browser_console_messages` for connection errors (CORS, 404, timeout). If CORS issue, fix `server/src/index.ts` CORS config to include the Vercel domain.
+- [x] **14.4** Trace the client-side connection flow. Read `portal/hooks/useSocket.ts` and `portal/hooks/useGame.ts` — add temporary console.logs or use Playwright to check what happens after clicking "Hrát": does Socket.IO connect? Does it emit `matchmaking:join`? Does it receive `room:created`? Identify where the flow breaks.
+- [x] **14.5** Trace the server-side room creation flow. Check `server/src/index.ts` socket event handlers, `server/src/rooms/RoomManager.ts`, and `server/src/services/matchmaking.ts`. Verify the server handles incoming events and creates rooms. Check Redis connectivity (Upstash) since matchmaking depends on it.
+- [x] **14.6** Fix the identified issue(s), redeploy both services, and verify a game can be played end-to-end. Test both "Rychlá hra" and "Vytvořit místnost" flows. Only mark complete when a room loads and a game starts successfully.

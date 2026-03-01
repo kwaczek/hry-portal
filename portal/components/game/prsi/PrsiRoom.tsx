@@ -21,7 +21,7 @@ interface PrsiRoomProps {
 
 export function PrsiRoom({ roomCode }: PrsiRoomProps) {
   const router = useRouter();
-  const { user, isGuest } = useAuth();
+  const { user, isGuest, session, loading: authLoading } = useAuth();
   const { socket, connectionState, connectionError, reconnect } = useSocket();
   const { gameState, gameResult, chatMessages, error, actions } = useGame({ socket, roomCode });
 
@@ -67,6 +67,17 @@ export function PrsiRoom({ roomCode }: PrsiRoomProps) {
     actions.leaveRoom();
     router.push('/prsi');
   }, [actions, router]);
+
+  // --- Auth check ---
+  if (!authLoading && !session) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 min-h-[60vh]">
+        <div className="text-lg font-semibold">Pro hru je potřeba se přihlásit</div>
+        <p className="text-gray-400 text-sm">Přihlas se nebo si vytvoř účet pro hraní.</p>
+        <Button onClick={() => router.push('/prihlaseni')}>Přihlásit se</Button>
+      </div>
+    );
+  }
 
   // --- Connection states ---
 

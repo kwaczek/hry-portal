@@ -13,7 +13,7 @@ import type { PrsiRuleVariant } from '@hry/shared';
 
 export default function PrsiPage() {
   const router = useRouter();
-  const { session } = useAuth();
+  const { session, loading: authLoading } = useAuth();
   const { socket, connectionState } = useSocket();
 
   const [joinCode, setJoinCode] = useState('');
@@ -97,6 +97,7 @@ export default function PrsiPage() {
   }, [joinCode, router]);
 
   const isConnected = connectionState === 'connected';
+  const needsLogin = !authLoading && !session;
 
   return (
     <div className="relative min-h-[calc(100vh-3.5rem)] overflow-hidden">
@@ -152,6 +153,15 @@ export default function PrsiPage() {
                     Zrušit
                   </Button>
                 </div>
+              ) : needsLogin ? (
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
+                  onClick={() => router.push('/prihlaseni')}
+                >
+                  Přihlásit se a hrát
+                </Button>
               ) : (
                 <Button
                   variant="primary"
@@ -186,10 +196,10 @@ export default function PrsiPage() {
                 size="lg"
                 className="w-full"
                 loading={creating}
-                onClick={handleCreateRoom}
-                disabled={!isConnected}
+                onClick={needsLogin ? () => router.push('/prihlaseni') : handleCreateRoom}
+                disabled={!needsLogin && !isConnected}
               >
-                Vytvořit místnost
+                {needsLogin ? 'Přihlásit se' : 'Vytvořit místnost'}
               </Button>
             </div>
           </div>
