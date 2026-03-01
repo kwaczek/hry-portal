@@ -70,17 +70,26 @@ export function PrsiHand({ hand, gameState, isMyTurn, onPlayCard, onDrawCard, on
     : 0;
 
   return (
-    <div className="w-full">
+    <div className={`w-full rounded-xl transition-all duration-300 ${
+      isMyTurn
+        ? 'ring-2 ring-red-500/30 bg-red-500/[0.03] shadow-[0_0_20px_rgba(239,68,68,0.1)]'
+        : ''
+    }`}>
       {/* Hand label */}
-      <div className="flex items-center justify-between mb-2 px-2">
+      <div className="flex items-center justify-between mb-2 px-3 pt-2">
         <span className="text-xs text-gray-500 uppercase tracking-wider">
           Tvoje karty ({hand.length})
         </span>
-        {isMyTurn && (
-          <span className="text-xs font-medium text-red-400 animate-pulse">
+        {isMyTurn ? (
+          <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-red-500/15 text-sm font-bold text-red-400 animate-pulse">
+            <span className="w-2 h-2 rounded-full bg-red-500" />
             Tvůj tah!
           </span>
-        )}
+        ) : gameState.phase === 'playing' ? (
+          <span className="text-xs text-gray-600">
+            Čekej...
+          </span>
+        ) : null}
       </div>
 
       {/* Cards */}

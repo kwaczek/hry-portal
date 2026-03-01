@@ -16,14 +16,16 @@ interface PrsiTableProps {
 function OpponentArea({ player, isCurrent }: { player: PrsiPlayer; isCurrent: boolean }) {
   return (
     <div className={`
-      flex flex-col items-center gap-1.5 p-2 rounded-lg transition-all duration-300
-      ${isCurrent ? 'bg-white/[0.04] ring-1 ring-red-500/30' : ''}
+      relative flex flex-col items-center gap-1.5 p-2.5 rounded-xl transition-all duration-300
+      ${isCurrent ? 'bg-red-500/[0.08] ring-2 ring-red-500/40 shadow-[0_0_12px_rgba(239,68,68,0.15)]' : 'bg-white/[0.02]'}
       ${!player.isConnected ? 'opacity-40' : ''}
     `}>
       <div className="flex items-center gap-2">
-        <Avatar name={player.username} size="sm" />
+        <div className={`relative ${isCurrent ? 'ring-2 ring-red-500/50 rounded-full' : ''}`}>
+          <Avatar name={player.username} size="sm" />
+        </div>
         <div className="text-left">
-          <p className={`text-xs font-medium truncate max-w-[80px] ${isCurrent ? 'text-red-400' : 'text-gray-300'}`}>
+          <p className={`text-xs font-semibold truncate max-w-[80px] ${isCurrent ? 'text-red-300' : 'text-gray-300'}`}>
             {player.username}
           </p>
           <p className="text-[10px] text-gray-500">
@@ -47,9 +49,9 @@ function OpponentArea({ player, isCurrent }: { player: PrsiPlayer; isCurrent: bo
       </div>
 
       {isCurrent && (
-        <div className="flex items-center gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[10px] text-red-400">Hraje</span>
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/20">
+          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          <span className="text-[11px] font-semibold text-red-400">Hraje</span>
         </div>
       )}
     </div>
