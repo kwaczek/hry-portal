@@ -54,10 +54,15 @@ export function useGame({ socket, roomCode }: UseGameOptions) {
       setChatMessages(prev => [...prev, message]);
     };
 
+    const onTurnTimer = (secondsRemaining: number) => {
+      setGameState(prev => prev ? { ...prev, turnTimeRemaining: secondsRemaining } : prev);
+    };
+
     socket.on('room:state', onState);
     socket.on('room:error', onError);
     socket.on('game:ended', onEnded);
     socket.on('chat:message', onChat);
+    socket.on('game:turnTimer', onTurnTimer);
 
     return () => {
       socket.off('connect', onConnect);
@@ -65,6 +70,7 @@ export function useGame({ socket, roomCode }: UseGameOptions) {
       socket.off('room:error', onError);
       socket.off('game:ended', onEnded);
       socket.off('chat:message', onChat);
+      socket.off('game:turnTimer', onTurnTimer);
     };
   }, [socket, roomCode, router]);
 

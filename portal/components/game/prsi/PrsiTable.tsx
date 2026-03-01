@@ -133,18 +133,22 @@ export function PrsiTable({ gameState, myPlayerId, onDrawCard, isMyTurn }: PrsiT
       )}
 
       {/* Turn timer */}
-      {gameState.phase === 'playing' && gameState.turnTimeRemaining > 0 && (
-        <div className="flex items-center gap-2">
-          <div className="h-1 w-24 rounded-full bg-white/[0.06] overflow-hidden">
+      {gameState.phase === 'playing' && (
+        <div className="flex items-center gap-3 w-full max-w-xs px-4">
+          <div className="h-2.5 flex-1 rounded-full bg-white/[0.08] overflow-hidden">
             <div
-              className="h-full rounded-full transition-all duration-1000 ease-linear"
+              className={`h-full rounded-full transition-all duration-1000 ease-linear ${
+                gameState.turnTimeRemaining <= 5 ? 'animate-pulse' : ''
+              }`}
               style={{
                 width: `${(gameState.turnTimeRemaining / 30) * 100}%`,
                 backgroundColor: gameState.turnTimeRemaining <= 10 ? '#ef4444' : gameState.turnTimeRemaining <= 20 ? '#f59e0b' : '#22c55e',
               }}
             />
           </div>
-          <span className={`text-xs font-mono ${gameState.turnTimeRemaining <= 10 ? 'text-red-400' : 'text-gray-500'}`}>
+          <span className={`text-sm font-mono font-bold tabular-nums min-w-[3ch] text-right ${
+            gameState.turnTimeRemaining <= 10 ? 'text-red-400' : gameState.turnTimeRemaining <= 20 ? 'text-amber-400' : 'text-gray-400'
+          }`}>
             {gameState.turnTimeRemaining}s
           </span>
         </div>
