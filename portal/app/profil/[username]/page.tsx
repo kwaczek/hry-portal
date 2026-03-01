@@ -142,9 +142,9 @@ export default function ProfilePage({ params }: PageProps) {
   if (notFound || !profile) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <div className="text-6xl opacity-20">?</div>
+        <div className="text-6xl opacity-20">🃏</div>
         <h2 className="text-xl font-bold font-[family-name:var(--font-display)]">Hráč nenalezen</h2>
-        <p className="text-text-secondary text-sm">Uživatel &quot;{decodedUsername}&quot; neexistuje.</p>
+        <p className="text-text-secondary text-sm">Uživatel &quot;{decodedUsername}&quot; nesedí u žádného stolu.</p>
         <Link href="/" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
           &larr; Zpět na hlavní stránku
         </Link>
@@ -170,12 +170,19 @@ export default function ProfilePage({ params }: PageProps) {
       <div className="relative mx-auto max-w-2xl px-4 sm:px-6 py-8 sm:py-12">
         {/* Profile header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-8 animate-[fadeInUp_0.4s_ease-out]">
-          <Avatar
-            src={profile.avatar_url}
-            name={displayName}
-            size="lg"
-            className="!h-20 !w-20 !text-2xl ring-2 ring-border-default"
-          />
+          <div className="relative">
+            <Avatar
+              src={profile.avatar_url}
+              name={displayName}
+              size="lg"
+              className="!h-20 !w-20 !text-2xl ring-2 ring-amber-400/20"
+            />
+            {prsiRating && prsiRating.elo >= 1200 && (
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-bg-elevated border border-amber-400/30 flex items-center justify-center text-xs">
+                {prsiRating.elo >= 1500 ? '🏆' : prsiRating.elo >= 1200 ? '⭐' : ''}
+              </div>
+            )}
+          </div>
           <div className="flex-1 text-center sm:text-left">
             <div className="flex flex-col sm:flex-row items-center sm:items-baseline gap-2">
               <h1 className="text-2xl font-bold font-[family-name:var(--font-display)]">
@@ -185,7 +192,7 @@ export default function ProfilePage({ params }: PageProps) {
             </div>
             <p className="text-sm text-text-muted mt-1">@{profile.username}</p>
             <p className="text-xs text-text-faint mt-1">
-              Členem od {memberSince}
+              U stolu od {memberSince}
             </p>
             {isOwnProfile && (
               <button
@@ -201,9 +208,7 @@ export default function ProfilePage({ params }: PageProps) {
         {/* Stats grid */}
         {prsiRating && (
           <div className="mb-8 animate-[fadeInUp_0.5s_ease-out]">
-            <h2 className="text-sm text-text-muted uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
-              Prší — Statistiky
-            </h2>
+            <SectionHeader label="Prší — Statistiky" suit="♠" />
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <StatBlock label="Elo" value={prsiRating.elo.toString()} accent="amber" />
               <StatBlock label="Odehráno" value={prsiRating.games_played.toString()} />
@@ -228,15 +233,17 @@ export default function ProfilePage({ params }: PageProps) {
 
         {!prsiRating && (
           <div className="mb-8 rounded-xl border border-border-subtle bg-bg-card p-6 text-center animate-[fadeInUp_0.5s_ease-out]">
+            <div className="text-3xl opacity-20 mb-2">🃏</div>
             <p className="text-text-muted text-sm">Zatím žádné odehrané hry</p>
+            <Link href="/prsi" className="text-xs text-amber-400 hover:text-amber-300 transition-colors mt-1 inline-block">
+              Sedni ke stolu &rarr;
+            </Link>
           </div>
         )}
 
         {/* Recent matches */}
         <div className="animate-[fadeInUp_0.6s_ease-out]">
-          <h2 className="text-sm text-text-muted uppercase tracking-wider mb-3 font-[family-name:var(--font-display)]">
-            Poslední zápasy
-          </h2>
+          <SectionHeader label="Poslední zápasy" suit="♥" />
 
           {recentMatches.length === 0 ? (
             <div className="rounded-xl border border-border-subtle bg-bg-card p-6 text-center">
@@ -271,7 +278,7 @@ export default function ProfilePage({ params }: PageProps) {
                         : 'bg-bg-elevated text-text-muted'
                       }
                     `}>
-                      {me?.placement ?? '—'}.
+                      {won ? '🏆' : `${me?.placement ?? '—'}.`}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -299,8 +306,14 @@ export default function ProfilePage({ params }: PageProps) {
         </div>
 
         {/* Back link */}
-        <div className="mt-8 text-center">
-          <Link href="/zebricek" className="text-sm text-text-muted hover:text-text-secondary transition-colors">
+        <div className="mt-10 text-center space-y-3">
+          <div className="flex items-center justify-center gap-2 text-text-faint/30 text-xs">
+            <span>♥</span>
+            <span>♠</span>
+            <span>♦</span>
+            <span>♣</span>
+          </div>
+          <Link href="/zebricek" className="text-sm text-text-muted hover:text-amber-400 transition-colors">
             Zobrazit žebříček &rarr;
           </Link>
         </div>
@@ -317,6 +330,18 @@ export default function ProfilePage({ params }: PageProps) {
           }}
         />
       )}
+    </div>
+  );
+}
+
+function SectionHeader({ label, suit }: { label: string; suit: string }) {
+  return (
+    <div className="flex items-center gap-2.5 mb-3">
+      <span className="text-amber-400/30 text-sm">{suit}</span>
+      <h2 className="text-sm text-text-muted uppercase tracking-wider font-[family-name:var(--font-display)]">
+        {label}
+      </h2>
+      <div className="flex-1 h-px bg-gradient-to-r from-border-subtle to-transparent" />
     </div>
   );
 }
