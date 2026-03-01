@@ -215,5 +215,5 @@
 - [x] **18.4** **Navigation & layout overhaul** — Update the root layout, nav bar, and footer with the new theme. Nav should feel integrated, not generic. Footer with hospoda-style credits. Smooth page transitions.
 - [x] **18.5** **Game room visual polish** — Update the Prší game table UI (`PrsiTable.tsx`, `PrsiHand.tsx`, `PrsiCard.tsx`) to match the hospoda theme. Card table should feel like a green felt pub table. Cards should have subtle shadows and tactile feel. Chat area styled like pub banter.
 - [x] **18.6** **Profile & leaderboard polish** — Update `/profil/[username]` and `/zebricek` with the new theme. Leaderboard as a pub championship board. Profile cards with hospoda styling.
-- [ ] **18.7** Test full portal with Playwright — take screenshots of every page. Verify responsive on mobile (375px) and desktop (1440px). Check for visual consistency, no broken layouts, all text readable.
+- [x] **18.7** Test full portal with Playwright — take screenshots of every page. Verify responsive on mobile (375px) and desktop (1440px). Check for visual consistency, no broken layouts, all text readable.
 - [ ] **18.8** Run `npm run build` and `npm test` — all must pass. Deploy to Vercel + Railway. Verify on production.
