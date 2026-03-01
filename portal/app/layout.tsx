@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { Bitter, Source_Sans_3 } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { Navigation } from '@/components/layout/Navigation';
+import { Footer } from '@/components/layout/Footer';
 import './globals.css';
 
 const bitter = Bitter({
@@ -47,10 +48,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs" className={`${bitter.variable} ${sourceSans.variable}`}>
-      <body className="bg-[var(--bg-root)] text-[var(--text-primary)] font-[family-name:var(--font-body)] antialiased min-h-screen">
+      <body className="bg-[var(--bg-root)] text-[var(--text-primary)] font-[family-name:var(--font-body)] antialiased min-h-screen flex flex-col">
         <AuthProvider>
           <Navigation />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
+          <Footer />
         </AuthProvider>
         {process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID && (
           <Script
